@@ -7,53 +7,47 @@
 //
 
 #import "AppDelegate.h"
-#import "TFHpple.h"
-
+#import "FWBlogDataManager.h"
 #import "FWBlogEntity.h"
 
 @interface AppDelegate () <NSTableViewDelegate, NSTableViewDataSource>
 
 @property (nonatomic, assign) BOOL showBlogView;
-@property (nonatomic, strong) NSMutableArray* titleAry;
-@property (nonatomic, strong) NSMutableArray *blogURLAry;
+@property (nonatomic, strong) NSMutableArray* blogDataAry;
+@property (nonatomic, strong) FWBlogDataManager *blogManager;
+
 @end
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification
 {
-    NSLog(@"%s", __FUNCTION__);
-}
-
-- (void)awakeFromNib
-{
     //设置delegate
     [_webView setFrameLoadDelegate:self];
     [_webView setPolicyDelegate:self];
-
+    
     [[_webView preferences] setPlugInsEnabled:YES];
-    NSString* urlString = @"http://www.baidu.com";
+    NSString* urlString = @"http://objccn.io/";
     [_navbar setStringValue:urlString];
     [self onGo];
-
-    _showBlogView = YES;
-    _titleAry = [NSMutableArray array];
-    _blogURLAry = [NSMutableArray array];
     
     _blogTableView.delegate = self;
     _blogTableView.dataSource = self;
     
-    [self initBlogData];
+    _showBlogView = YES;
+    _blogDataAry = [NSMutableArray array];
+    _blogManager = [[FWBlogDataManager alloc] init];
+    [_blogManager initURLData];
     
-    [_titleAry removeAllObjects];
-    for (FWBlogEntity *blogIndex in _blogURLAry) {
-        NSArray *array = [self analyticalTitle:blogIndex];
-        [_titleAry addObjectsFromArray:array];
-    }
-    
-    if ([_titleAry count] >0) {
-        [_blogTableView reloadData];
-    }
+    __weak AppDelegate *weekThis = self;
+    [_blogManager parseData:YES block:^(NSArray *blogAry) {
+        [weekThis.blogDataAry removeAllObjects];
+        [weekThis.blogDataAry addObjectsFromArray:blogAry];
+        
+        if ([weekThis.blogDataAry count] > 0) {
+            [weekThis.blogTableView reloadData];
+        }
+    }];
 }
 
 //回车访问网站
@@ -94,7 +88,6 @@
 }
 
 #pragma mark - Private method
-//加载网站
 - (void)onGo
 {
     NSString* urlString = [_navbar stringValue];
@@ -102,74 +95,6 @@
         urlString = [NSString stringWithFormat:@"http://%@", urlString];
     }
     [[_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
-}
-
--(void)initBlogData
-{
-//    FWBlogEntity *devtang = [[FWBlogEntity alloc] init];
-//    devtang.author = @"唐乔";
-//    devtang.baseURL = @"http://www.devtang.com";
-//    devtang.archiveURL = @"http://www.devtang.com/blog/archives/";
-//    devtang.startFlag = @"<div id=\"blog-archives\">";
-//    devtang.endFlag = @"<aside class=\"sidebar\">";
-//    devtang.parseDom = @"//h1/a";
-//    [_blogURLAry addObject:devtang];
-    
-    
-//    FWBlogEntity *tony = [[FWBlogEntity alloc] init];
-//    tony.author = @"Tony";
-//    tony.baseURL = @"";
-//    tony.archiveURL = @"http://itony.me/archives";
-//    tony.startFlag = @"<div class=\"pta-postarchives\">";
-//    tony.endFlag = @"<footer class=\"entry-meta\">";
-//    tony.parseDom = @"//li/a";
-//    [_blogURLAry addObject:tony];
-    
-    FWBlogEntity *beyondvincent = [[FWBlogEntity alloc] init];
-    beyondvincent.author = @"破船之家";
-    beyondvincent.baseURL = @"http://beyondvincent.com";
-    beyondvincent.archiveURL = @"http://beyondvincent.com/archives/";
-    beyondvincent.startFlag = @"<div class=\"mid-col\">";
-    beyondvincent.endFlag = @"<footer id=\"footer\">";
-    beyondvincent.parseDom = @"//h1/a";
-    [_blogURLAry addObject:beyondvincent];
-    
-}
-
-- (NSMutableArray*)analyticalTitle:(FWBlogEntity *) blogData
-{
-    NSMutableArray* resultAry = [[NSMutableArray alloc] init];
-    NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:blogData.archiveURL]
-                                                     encoding:NSUTF8StringEncoding error:nil];
-    NSRange range = [htmlContent rangeOfString:blogData.startFlag];
-    if (range.length == 0) {
-        return resultAry;
-    }
-    NSString* tmpHtml = [htmlContent substringFromIndex:range.location + range.length];
-    
-    range = [tmpHtml rangeOfString:blogData.endFlag];
-    if (range.length == 0) {
-        return resultAry;
-    }
-    tmpHtml = [tmpHtml substringToIndex:range.location];
-
-    NSData* dataHtml = [tmpHtml dataUsingEncoding:NSUTF8StringEncoding];
-    TFHpple* xpathParser = [[TFHpple alloc] initWithHTMLData:dataHtml];
-    NSArray* elements = [xpathParser searchWithXPathQuery:blogData.parseDom];
-
-    for (TFHppleElement* element in elements) {
-        
-        FWBlogItemEntity *data = [[FWBlogItemEntity alloc] init];
-        data.title = element.content;
-        
-        NSDictionary* elementContent = [element attributes];
-        data.url = [blogData.baseURL stringByAppendingString:[elementContent objectForKey:@"href"]];
-        
-        [resultAry addObject:data];
-    }
-
-    NSLog(@"%s, resultAry:%@", __FUNCTION__, resultAry);
-    return resultAry;
 }
 
 #pragma mark - webview deleage
@@ -224,21 +149,21 @@
 - (NSView*)tableView:(NSTableView*)tableView viewForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row
 {
     NSTableCellView* cellView = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
-    FWBlogItemEntity *data = [_titleAry objectAtIndex:row];
-    cellView.textField.stringValue = data.title;
+    FWBlogEntity *data = [_blogDataAry objectAtIndex:row];
+    cellView.textField.stringValue = data.author;
     return cellView;
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView*)tableView
 {
-    return [_titleAry count];
+    return [_blogDataAry count];
 }
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification {
     NSInteger row = [_blogTableView selectedRow];
-    FWBlogItemEntity *data = [_titleAry objectAtIndex:row];
+    FWBlogEntity *data = [_blogDataAry objectAtIndex:row];
     
-    [_navbar setStringValue:data.url];
+    [_navbar setStringValue:data.archiveURL];
     [self onGo];
 }
 

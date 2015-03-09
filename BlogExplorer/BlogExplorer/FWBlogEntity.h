@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, FWDataTypeEnum) {
-    FWDataType_Base,
-    FWDataType_OctopressData,
+    FWDataType_WholePage,
+    FWDataType_BaseData,
     FWDataType_PageData,
 };
 

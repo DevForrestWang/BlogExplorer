@@ -12,6 +12,10 @@
 	<dict>
 		<key>0B118A925D5AE799D2A265AA9C47B9395A8B8B45</key>
 		<string>https://github.com/helloitworks/NSWebView.git</string>
+		<key>8698A6A84AA596D2C1F938AEA5DB69090BD204F4</key>
+		<string>https://github.com/allison162004/xcode_tool.git</string>
+		<key>90C29397A60DB3AED1C5E64CEFC7C34E5D94677F</key>
+		<string>https://github.com/DevForrestWang/BlogExplorer.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>BlogExplorer.xcodeproj</string>
@@ -19,6 +23,10 @@
 	<dict>
 		<key>0B118A925D5AE799D2A265AA9C47B9395A8B8B45</key>
 		<string>../..</string>
+		<key>8698A6A84AA596D2C1F938AEA5DB69090BD204F4</key>
+		<string>../../../..</string>
+		<key>90C29397A60DB3AED1C5E64CEFC7C34E5D94677F</key>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/helloitworks/NSWebView.git</string>
@@ -28,6 +36,22 @@
 	<string>0B118A925D5AE799D2A265AA9C47B9395A8B8B45</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>90C29397A60DB3AED1C5E64CEFC7C34E5D94677F</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8698A6A84AA596D2C1F938AEA5DB69090BD204F4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>..</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

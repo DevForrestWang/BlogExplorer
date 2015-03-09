@@ -10,8 +10,7 @@
 
 @interface FWBlogDataManager : NSObject
 
-- (void)initBaseData;
-- (void)parseData:(BOOL)parseAgain;
-- (void)readData:(void (^)(NSArray *array))blog;
+- (void)initURLData;
+- (void)parseData:(BOOL)forceParse block:(void (^)(NSArray *blogAry))block;
 - (void)saveData;
 @end
