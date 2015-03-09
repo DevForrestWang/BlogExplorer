@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37FDE7611AADE9DA00DE7FB9 /* FWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */; };
 		74B87917162C3DBE0028D523 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B87916162C3DBE0028D523 /* Cocoa.framework */; };
 		74B87934162C3DF20028D523 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B87933162C3DF20028D523 /* WebKit.framework */; };
 		95E0C7261AADA213002A8C55 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 95E0C7111AADA213002A8C55 /* AppDelegate.m */; };
@@ -23,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37FDE75F1AADE9DA00DE7FB9 /* FWUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWUtility.h; sourceTree = "<group>"; };
+		37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FWUtility.m; sourceTree = "<group>"; };
 		74B87912162C3DBE0028D523 /* BlogExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlogExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74B87916162C3DBE0028D523 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		74B87919162C3DBE0028D523 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -124,6 +127,8 @@
 				95E0C71B1AADA213002A8C55 /* FWBlogDataManager.m */,
 				95E0C71C1AADA213002A8C55 /* FWBlogEntity.h */,
 				95E0C71D1AADA213002A8C55 /* FWBlogEntity.m */,
+				37FDE75F1AADE9DA00DE7FB9 /* FWUtility.h */,
+				37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */,
 			);
 			path = BlogExplorer;
 			sourceTree = "<group>";
@@ -212,6 +217,7 @@
 				95E0C72F1AADA213002A8C55 /* XPathQuery.m in Sources */,
 				95E0C7301AADA213002A8C55 /* main.m in Sources */,
 				95E0C72E1AADA213002A8C55 /* TFHppleElement.m in Sources */,
+				37FDE7611AADE9DA00DE7FB9 /* FWUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
