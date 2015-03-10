@@ -14,7 +14,7 @@ typedef NS_ENUM(NSUInteger, FWDataTypeEnum) {
     FWDataType_PageData,
 };
 
-@interface FWBlogItemEntity : NSObject
+@interface FWBlogItemEntity : NSObject<NSCopying>
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *url;

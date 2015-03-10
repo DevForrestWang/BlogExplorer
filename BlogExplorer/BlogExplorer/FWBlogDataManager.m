@@ -124,7 +124,7 @@
                    startFlag:@"<div class=\"pta-postarchives\">"
                      endFlag:@"<footer class=\"entry-meta\">"
                     parseDom:@"//li/a"];
-    
+    /*
     [self makeBaseBlogEntity:array
                       author:@"破船之家"
                      baseURL:@"http://beyondvincent.com"
@@ -158,6 +158,7 @@
                    startFlag:@""
                      endFlag:@""
                     parseDom:@""];
+    */
 }
 
 - (void)makeBaseBlogEntity:(NSMutableArray *)array

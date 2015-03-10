@@ -10,10 +10,11 @@
 #import "FWBlogDataManager.h"
 #import "FWBlogEntity.h"
 
-@interface AppDelegate () <NSTableViewDelegate, NSTableViewDataSource>
+@interface AppDelegate () <NSOutlineViewDelegate, NSOutlineViewDataSource>
 
 @property (nonatomic, assign) BOOL showBlogView;
-@property (nonatomic, strong) NSMutableArray* blogDataAry;
+@property (nonatomic, strong) NSMutableArray* topLevelItems;
+@property (nonatomic, strong) NSMutableDictionary* blogDataDic;
 @property (nonatomic, strong) FWBlogDataManager *blogManager;
 
 @end
@@ -31,26 +32,20 @@
     [_navbar setStringValue:urlString];
     [self loadRequest];
     
-    _blogTableView.delegate = self;
-    _blogTableView.dataSource = self;
-    
     _showBlogView = YES;
-    _blogDataAry = [NSMutableArray array];
+    _topLevelItems = [NSMutableArray array];
+    _blogDataDic = [NSMutableDictionary dictionary];
+    
     _blogManager = [[FWBlogDataManager alloc] init];
     [_blogManager initURLData];
     
     __weak AppDelegate *weekThis = self;
     [_blogManager parseData:YES block:^(NSArray *blogAry) {
-        [weekThis.blogDataAry removeAllObjects];
-        [weekThis.blogDataAry addObjectsFromArray:blogAry];
-        
-        if ([weekThis.blogDataAry count] > 0) {
-            [weekThis.blogTableView reloadData];
-        }
+        [weekThis refreshData:blogAry];
     }];
 }
 
-- (IBAction)enterToGo:(id)sender
+- (IBAction)enterGo:(id)sender
 {
     [self loadRequest];
 }
@@ -141,25 +136,101 @@
 }
 
 #pragma mark - NSTableViewDelegate
-- (NSView*)tableView:(NSTableView*)tableView viewForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row
+- (void)refreshData:(NSArray *)dataAry
 {
-    NSTableCellView* cellView = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
-    FWBlogEntity *data = [_blogDataAry objectAtIndex:row];
-    cellView.textField.stringValue = data.author;
-    return cellView;
-}
-
-- (NSInteger)numberOfRowsInTableView:(NSTableView*)tableView
-{
-    return [_blogDataAry count];
-}
-
-- (void)tableViewSelectionDidChange:(NSNotification *)notification {
-    NSInteger row = [_blogTableView selectedRow];
-    FWBlogEntity *data = [_blogDataAry objectAtIndex:row];
+    if ((!dataAry) || ([dataAry count] <= 0)) {
+        NSLog(@"%s, the dataAry is empty.", __FUNCTION__);
+        return;
+    }
     
-    [_navbar setStringValue:data.archiveURL];
-    [self loadRequest];
+    for (FWBlogEntity *indexEntity in dataAry) {
+        FWBlogItemEntity *keyObj = [[FWBlogItemEntity alloc] init];
+        keyObj.title = indexEntity.author;
+        [_topLevelItems addObject:keyObj];
+        
+        NSMutableArray *array = [NSMutableArray arrayWithArray:indexEntity.itemAry];
+        if ([array count] > 0) {
+            [_blogDataDic setObject:array forKey:keyObj];
+        }
+        
+        
+//        [_topLevelItems addObject:indexEntity.author];
+//        NSMutableArray* array = [NSMutableArray array];
+//        for (FWBlogItemEntity *itemEntity in indexEntity.itemAry) {
+//            [array addObject:itemEntity.title];
+//        }
+//        
+//        if ([array count] > 0) {
+//            [_blogDataDic setObject:array forKey:indexEntity.author];
+//        }
+        
+    }
+    
+    [_blogOutlineView sizeLastColumnToFit];
+    [_blogOutlineView reloadData];
+    [_blogOutlineView setFloatsGroupRows:YES];
+    [_blogOutlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
+    
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setDuration:0];
+    [_blogOutlineView expandItem:nil expandChildren:NO];
+    [NSAnimationContext endGrouping];
 }
+
+- (NSArray*)childrenForItem:(id)item
+{
+    NSArray* tempAry = nil;
+    if (item == nil) {
+        tempAry = _topLevelItems;
+    }
+    else {
+        tempAry = [_blogDataDic objectForKey:item];
+    }
+    return tempAry;
+}
+
+#pragma mark - NSOutlineViewDelegate NSOutlineViewDataSource
+- (NSInteger)outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
+{
+    return [[self childrenForItem:item] count];
+}
+
+- (BOOL)outlineView:(NSOutlineView*)outlineView isItemExpandable:(id)item
+{
+    if ([outlineView parentForItem:item] == nil) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
+- (id)outlineView:(NSOutlineView*)outlineView child:(NSInteger)index ofItem:(id)item
+{
+    return [[self childrenForItem:item] objectAtIndex:index];
+}
+
+- (id)outlineView:(NSOutlineView*)outlineView objectValueForTableColumn:(NSTableColumn*)tableColumn byItem:(id)item
+{
+    return ((FWBlogItemEntity *)item).title;
+}
+
+- (void)outlineViewSelectionDidChange:(NSNotification*)notification
+{
+    if ([_blogOutlineView selectedRow] != -1) {
+        NSString* item = [_blogOutlineView itemAtRow:[_blogOutlineView selectedRow]];
+        NSLog(@"%s, item:%@", __FUNCTION__, item);
+    }
+}
+
+
+//
+//- (void)tableViewSelectionDidChange:(NSNotification *)notification {
+//    NSInteger row = [_blogTableView selectedRow];
+//    FWBlogEntity *data = [_blogDataAry objectAtIndex:row];
+//    
+//    [_navbar setStringValue:data.archiveURL];
+//    [self loadRequest];
+//}
 
 @end

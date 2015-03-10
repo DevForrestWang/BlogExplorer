@@ -120,9 +120,9 @@
 			children = (
 				95E0C71E1AADA213002A8C55 /* hpple */,
 				95CF2B111AADA355007F5979 /* Supporting Files */,
-				95E0C7181AADA213002A8C55 /* MainMenu.xib */,
 				95E0C7101AADA213002A8C55 /* AppDelegate.h */,
 				95E0C7111AADA213002A8C55 /* AppDelegate.m */,
+				95E0C7181AADA213002A8C55 /* MainMenu.xib */,
 				95E0C71A1AADA213002A8C55 /* FWBlogDataManager.h */,
 				95E0C71B1AADA213002A8C55 /* FWBlogDataManager.m */,
 				95E0C71C1AADA213002A8C55 /* FWBlogEntity.h */,
