@@ -10,14 +10,6 @@
 
 @implementation FWBlogItemEntity
 
-- (id)copyWithZone:(NSZone *)zone
-{
-    FWBlogItemEntity *itenty = [[FWBlogItemEntity allocWithZone:zone] init];
-    itenty.title = self.title;
-    itenty.url = self.url;
-    return itenty;
-}
-
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"%s, title:%@, url:%@", __FUNCTION__, _title, _url];

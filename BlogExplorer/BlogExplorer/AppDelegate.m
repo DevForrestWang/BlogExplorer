@@ -9,12 +9,14 @@
 #import "AppDelegate.h"
 #import "FWBlogDataManager.h"
 #import "FWBlogEntity.h"
+#import "FWUtility.h"
 
 @interface AppDelegate () <NSOutlineViewDelegate, NSOutlineViewDataSource>
 
 @property (nonatomic, assign) BOOL showBlogView;
 @property (nonatomic, strong) NSMutableArray* topLevelItems;
 @property (nonatomic, strong) NSMutableDictionary* blogDataDic;
+@property (nonatomic, strong) NSMutableDictionary* titleToURLDic;
 @property (nonatomic, strong) FWBlogDataManager *blogManager;
 
 @end
@@ -35,6 +37,7 @@
     _showBlogView = YES;
     _topLevelItems = [NSMutableArray array];
     _blogDataDic = [NSMutableDictionary dictionary];
+    _titleToURLDic = [NSMutableDictionary dictionary];
     
     _blogManager = [[FWBlogDataManager alloc] init];
     [_blogManager initURLData];
@@ -144,26 +147,20 @@
     }
     
     for (FWBlogEntity *indexEntity in dataAry) {
-        FWBlogItemEntity *keyObj = [[FWBlogItemEntity alloc] init];
-        keyObj.title = indexEntity.author;
-        [_topLevelItems addObject:keyObj];
+        [_topLevelItems addObject:indexEntity.author];
         
-        NSMutableArray *array = [NSMutableArray arrayWithArray:indexEntity.itemAry];
-        if ([array count] > 0) {
-            [_blogDataDic setObject:array forKey:keyObj];
+        NSMutableArray* array = [NSMutableArray array];
+        for (FWBlogItemEntity *itemEntity in indexEntity.itemAry) {
+            [array addObject:itemEntity.title];
+            [_titleToURLDic setObject:itemEntity.url forKey:itemEntity.title];
         }
         
-        
-//        [_topLevelItems addObject:indexEntity.author];
-//        NSMutableArray* array = [NSMutableArray array];
-//        for (FWBlogItemEntity *itemEntity in indexEntity.itemAry) {
-//            [array addObject:itemEntity.title];
-//        }
-//        
-//        if ([array count] > 0) {
-//            [_blogDataDic setObject:array forKey:indexEntity.author];
-//        }
-        
+        if ([array count] > 0) {
+            [_blogDataDic setObject:array forKey:indexEntity.author];
+        }
+        else {
+            [_titleToURLDic setObject:indexEntity.baseURL forKey:indexEntity.author];
+        }
     }
     
     [_blogOutlineView sizeLastColumnToFit];
@@ -212,25 +209,20 @@
 
 - (id)outlineView:(NSOutlineView*)outlineView objectValueForTableColumn:(NSTableColumn*)tableColumn byItem:(id)item
 {
-    return ((FWBlogItemEntity *)item).title;
+    return item;
 }
 
 - (void)outlineViewSelectionDidChange:(NSNotification*)notification
 {
     if ([_blogOutlineView selectedRow] != -1) {
-        NSString* item = [_blogOutlineView itemAtRow:[_blogOutlineView selectedRow]];
-        NSLog(@"%s, item:%@", __FUNCTION__, item);
+        NSString* title = [_blogOutlineView itemAtRow:[_blogOutlineView selectedRow]];
+        NSString* strURL = [_titleToURLDic objectForKey:title];
+        
+        if (![FWUtility invalidString:strURL]) {
+            [_navbar setStringValue:strURL];
+            [self loadRequest];
+        }
     }
 }
-
-
-//
-//- (void)tableViewSelectionDidChange:(NSNotification *)notification {
-//    NSInteger row = [_blogTableView selectedRow];
-//    FWBlogEntity *data = [_blogDataAry objectAtIndex:row];
-//    
-//    [_navbar setStringValue:data.archiveURL];
-//    [self loadRequest];
-//}
 
 @end

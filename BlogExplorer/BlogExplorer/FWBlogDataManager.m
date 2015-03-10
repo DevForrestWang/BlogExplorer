@@ -78,6 +78,13 @@
 #pragma mark - Private method
 - (void) makeWholePage:(NSMutableArray *)array
 {
+    FWBlogEntity *objcCN = [[FWBlogEntity alloc] init];
+    objcCN.dataType = FWDataType_WholePage;
+    objcCN.author = @"objc中国";
+    objcCN.baseURL = @"http://objccn.io/";
+    objcCN.archiveURL = @"http://objccn.io/";
+    [array addObject:objcCN];
+    
     FWBlogEntity *raywenderlich = [[FWBlogEntity alloc] init];
     raywenderlich.dataType = FWDataType_WholePage;
     raywenderlich.author = @"Raywenderlich";
@@ -98,13 +105,6 @@
     objc.baseURL = @"http://www.objc.io/";
     objc.archiveURL = @"http://www.objc.io/";
     [array addObject:objc];
-    
-    FWBlogEntity *objcCN = [[FWBlogEntity alloc] init];
-    objcCN.dataType = FWDataType_WholePage;
-    objcCN.author = @"objc中国";
-    objcCN.baseURL = @"http://objccn.io/";
-    objcCN.archiveURL = @"http://objccn.io/";
-    [array addObject:objcCN];
 }
 
 - (void) makeBaseData:(NSMutableArray *)array
@@ -217,7 +217,6 @@
         [resultAry addObject:data];
     }
     
-    NSLog(@"%s, resultAry:%@", __FUNCTION__, resultAry);
     blogData.itemAry = resultAry;
     return YES;
 }
