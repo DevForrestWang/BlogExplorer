@@ -68,8 +68,8 @@
         [_blogListScrollView setHidden:NO];
 
         CGRect frame = _webView.frame;
-        frame.origin.x = 270;
-        frame.size.width = width - 270;
+        frame.origin.x = 314;
+        frame.size.width = width - 314;
         _webView.frame = frame;
     }
     else {
