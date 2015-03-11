@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSMutableDictionary* titleToURLDic;
 @property (nonatomic, strong) FWBlogDataManager *blogManager;
 
+@property (nonatomic, strong) NSTimer *queryStartTimer;
 @end
 
 @implementation AppDelegate
@@ -46,8 +47,19 @@
     [_blogManager parseData:YES block:^(NSArray *blogAry) {
         [weekThis refreshData:blogAry];
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(searchTextDidChange:)
+                                                 name:NSControlTextDidChangeNotification
+                                               object:_searchTextField];
 }
 
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Action method
 - (IBAction)enterGo:(id)sender
 {
     [self loadRequest];
@@ -91,6 +103,23 @@
         urlString = [NSString stringWithFormat:@"http://%@", urlString];
     }
     [[_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
+}
+
+- (void)startNewSearchQuery:(NSTimer*)theTimer
+{
+    NSLog(@"%@", [_searchTextField stringValue]);
+    [_queryStartTimer invalidate];
+    _queryStartTimer = NULL;
+}
+
+- (void)searchTextDidChange:(NSNotification *)notification
+{
+#define QUERY_DELAY 0.25
+    if (_queryStartTimer) {
+        [_queryStartTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:QUERY_DELAY]];
+    } else {
+        _queryStartTimer = [NSTimer scheduledTimerWithTimeInterval:QUERY_DELAY target:self selector:@selector(startNewSearchQuery:) userInfo:nil repeats:NO];
+    }
 }
 
 #pragma mark - webview deleage
