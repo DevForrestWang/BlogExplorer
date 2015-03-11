@@ -78,38 +78,83 @@
 #pragma mark - Private method
 - (void) makeWholePage:(NSMutableArray *)array
 {
-    FWBlogEntity *objcCN = [[FWBlogEntity alloc] init];
-    objcCN.dataType = FWDataType_WholePage;
-    objcCN.author = @"objc中国";
-    objcCN.baseURL = @"http://objccn.io/";
-    objcCN.archiveURL = @"http://objccn.io/";
-    [array addObject:objcCN];
+    [self makeWholeEntity:array
+                   author:@"objc中国"
+                  baseURL:@"http://objccn.io/"
+               archiveURL: @"http://objccn.io/"];
     
-    FWBlogEntity *raywenderlich = [[FWBlogEntity alloc] init];
-    raywenderlich.dataType = FWDataType_WholePage;
-    raywenderlich.author = @"Raywenderlich";
-    raywenderlich.baseURL = @"http://www.raywenderlich.com/tutorials";
-    raywenderlich.archiveURL = @"http://www.raywenderlich.com/tutorials";
-    [array addObject:raywenderlich];
+    [self makeWholeEntity:array
+                   author:@"Raywenderlich"
+                  baseURL:@"http://www.raywenderlich.com/tutorials"
+               archiveURL:@"http://www.raywenderlich.com/tutorials"];
     
-    FWBlogEntity *nshipster = [[FWBlogEntity alloc] init];
-    nshipster.dataType = FWDataType_WholePage;
-    nshipster.author = @"Nshipster";
-    nshipster.baseURL = @"http://nshipster.com/";
-    nshipster.archiveURL = @"http://nshipster.com/";
-    [array addObject:nshipster];
+    [self makeWholeEntity:array
+                   author:@"Nshipster"
+                  baseURL:@"http://nshipster.com/"
+               archiveURL:@"http://nshipster.com/"];
     
-    FWBlogEntity *objc = [[FWBlogEntity alloc] init];
-    objc.dataType = FWDataType_WholePage;
-    objc.author = @"objc";
-    objc.baseURL = @"http://www.objc.io/";
-    objc.archiveURL = @"http://www.objc.io/";
-    [array addObject:objc];
+    [self makeWholeEntity:array
+                   author:@"objc"
+                  baseURL:@"http://www.objc.io/"
+               archiveURL:@"http://www.objc.io/"];
+    
+    [self makeWholeEntity:array
+                   author:@"拾光流"
+                  baseURL:@"http://www.jianshu.com/collection/6d967bc213dd"
+               archiveURL:@"http://www.jianshu.com/collection/6d967bc213dd"];
+    
+    [self makeWholeEntity:array
+                   author:@"大澎湃"
+                  baseURL:@"http://www.jianshu.com/collection/e62c0b71606b"
+               archiveURL:@"http://www.jianshu.com/collection/e62c0b71606b"];
+    
+    [self makeWholeEntity:array
+                   author:@"JanzTam"
+                  baseURL:@"http://www.jianshu.com/collection/19dbe28002a3"
+               archiveURL:@"http://www.jianshu.com/collection/19dbe28002a3"];
+    
+    [self makeWholeEntity:array
+                   author:@"Davi_choise凡UP"
+                  baseURL:@"http://www.jianshu.com/collection/27e6fb9b84f7"
+               archiveURL:@"http://www.jianshu.com/collection/27e6fb9b84f7"];
+    
+    [self makeWholeEntity:array
+                   author:@"RobinChao"
+                  baseURL:@"http://www.jianshu.com/collection/2a6ff924a333"
+               archiveURL:@"http://www.jianshu.com/collection/2a6ff924a333"];
+    
+    [self makeWholeEntity:array
+                   author:@"23Years"
+                  baseURL:@"http://www.jianshu.com/collection/8beb0140cf67"
+               archiveURL:@"http://www.jianshu.com/collection/8beb0140cf67"];
+    
+    [self makeWholeEntity:array
+                   author:@"JasonWu"
+                  baseURL:@"http://www.jianshu.com/collection/fec73bf35ed3"
+               archiveURL:@"http://www.jianshu.com/collection/fec73bf35ed3"];
+    
+    
+    [self makeWholeEntity:array
+                   author:@"季真"
+                  baseURL:@"http://www.jianshu.com/collection/505442c4ef96"
+               archiveURL:@"http://www.jianshu.com/collection/505442c4ef96"];
+    
+    [self makeWholeEntity:array
+                   author:@"Azen"
+                  baseURL:@"http://www.jianshu.com/collection/8a0602419a76"
+               archiveURL:@"http://www.jianshu.com/collection/8a0602419a76"];
 }
 
 - (void) makeBaseData:(NSMutableArray *)array
 {
-    /*
+    [self makeBaseBlogEntity:array
+                      author:@"Forrest Wang"
+                     baseURL:@"http://devforrestwang.github.io"
+                  archiveURL:@"http://devforrestwang.github.io/blog/archives/"
+                   startFlag:@"<section class=\"archives\">"
+                     endFlag:@"<footer id=\"footer\""
+                    parseDom:@"//h1/a"];
+    
     [self makeBaseBlogEntity:array
                       author:@"唐乔"
                      baseURL:@"http://www.devtang.com"
@@ -126,6 +171,7 @@
                      endFlag:@"<footer class=\"entry-meta\">"
                     parseDom:@"//li/a"];
     
+    /*
     [self makeBaseBlogEntity:array
                       author:@"破船之家"
                      baseURL:@"http://beyondvincent.com"
@@ -200,57 +246,158 @@
                    startFlag:@"<div class=\"span12\">"
                      endFlag:@"<footer>"
                     parseDom:@"//li/a"];
+    
+    
+    [self makeBaseBlogEntity:array
+                      author:@"王中周的技术博客"
+                     baseURL:@"http://foggry.com"
+                  archiveURL:@"http://foggry.com/blog/archives/"
+                   startFlag:@"<div id=\"blog-archives\">"
+                     endFlag:@"<aside class=\"sidebar\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"码农人生"
+                     baseURL:@"http://msching.github.io"
+                  archiveURL:@"http://msching.github.io/blog/archives/"
+                   startFlag:@"<section class=\"archives\">"
+                     endFlag:@"<footer id=\"footer\" class=\"inner\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"煲仔饭"
+                     baseURL:@"http://ivoryxiong.org"
+                  archiveURL:@"http://ivoryxiong.org/categories/"
+                   startFlag:@"<ul class=\"listing\">"
+                     endFlag:@"<div class=\"footer-wrap\">"
+                    parseDom:@"//li/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"猫·仁波切"
+                     baseURL:@"http://andelf.github.io"
+                  archiveURL:@"http://andelf.github.io/blog/archives/"
+                   startFlag:@"<div id=\"blog-archives\">"
+                     endFlag:@"<aside class=\"sidebar\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"Itty Bitty Labs"
+                     baseURL:@"http://blog.ittybittyapps.com"
+                  archiveURL:@"http://blog.ittybittyapps.com/blog/archives/"
+                   startFlag:@"<div id=\"blog-archives\">"
+                     endFlag:@"<aside class=\"sidebar\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"Adoption Curve Dot Net"
+                     baseURL:@"http://adoptioncurve.net"
+                  archiveURL:@"http://adoptioncurve.net/blog/archives/"
+                   startFlag:@"<div id=\"blog-archives\">"
+                     endFlag:@"<aside class=\"sidebar\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"txx's blog"
+                     baseURL:@"http://blog.txx.im"
+                  archiveURL:@"http://blog.txx.im/blog/archives"
+                   startFlag:@"<div id=\"content\" class=\"inner\">"
+                     endFlag:@"<footer id=\"footer\" class=\"inner\">"
+                    parseDom:@"//h2/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"hSATAC"
+                     baseURL:@"http://blog.hsatac.net"
+                  archiveURL:@"http://blog.hsatac.net/blog/archives/"
+                   startFlag:@"<div id=\"content\" class=\"inner\">"
+                     endFlag:@"<footer id=\"footer\" class=\"inner\"><p>"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"里脊串的开发随笔"
+                     baseURL:@"http://adad184.com"
+                  archiveURL:@"http://adad184.com/archives/"
+                   startFlag:@"<section id=\"main\">"
+                     endFlag:@"<aside id=\"sidebar\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"成长的路上(Moonlight)"
+                     baseURL:@""
+                  archiveURL:@"http://www.cnblogs.com/zhw511006/category/189553.html"
+                   startFlag:@"<div class=\"entrylist\">"
+                     endFlag:@"<div id=\"sideBar\">"
+                    parseDom:@"//div[@class='entrylistPosttitle']//a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"wayne23"
+                     baseURL:@""
+                  archiveURL:@"http://www.cnblogs.com/wayne23/category/429228.html"
+                   startFlag:@"<div class=\"entrylist\">"
+                     endFlag:@"<div id=\"sideBar\">"
+                    parseDom:@"//div[@class='entrylistPosttitle']//a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"念茜的博客"
+                     baseURL:@""
+                  archiveURL:@"http://nianxi.net/"
+                   startFlag:@"<div class=\"page-body\" itemprop=\"description\">"
+                     endFlag:@"<footer id=\"footer\""
+                    parseDom:@"//h2/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"言无不尽"
+                     baseURL:@"http://tang3w.com"
+                  archiveURL:@"http://tang3w.com/"
+                   startFlag:@"<ul class=\"posts\">"
+                     endFlag:@"<div id=\"foot\">"
+                    parseDom:@"//li/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"webfrogs' Homepage"
+                     baseURL:@""
+                  archiveURL:@"http://blog.nswebfrog.com/categories/"
+                   startFlag:@"<ul class=\"listing\">"
+                     endFlag:@"<footer>"
+                    parseDom:@"//li/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"Travis' Blog"
+                     baseURL:@"http://imi.im"
+                  archiveURL:@"http://imi.im/"
+                   startFlag:@"<div class=\"mp-scroll\">"
+                     endFlag:@"</div>"
+                    parseDom:@"//li/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"萧宸宇"
+                     baseURL:@"http://iiiyu.com"
+                  archiveURL:@"http://iiiyu.com/archives/"
+                   startFlag:@"<section id=\"main\">"
+                     endFlag:@"<aside id=\"sidebar\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"Chun Tips"
+                     baseURL:@"http://chun.tips"
+                  archiveURL:@"http://chun.tips/blog/archives/"
+                   startFlag:@"<div id=\"blog-archives\">"
+                     endFlag:@"<footer role=\"contentinfo\">"
+                    parseDom:@"//li/a"];
+     
      */
-    
-    
-//    [self makeBaseBlogEntity:array
-//                      author:@"王中周的技术博客"
-//                     baseURL:@"http://foggry.com"
-//                  archiveURL:@"http://foggry.com/blog/archives/"
-//                   startFlag:@"<div id=\"blog-archives\">"
-//                     endFlag:@"<aside class=\"sidebar thirds\">"
-//                    parseDom:@"//h1/a"];
-    
-    [self makeBaseBlogEntity:array
-                      author:@""
-                     baseURL:@""
-                  archiveURL:@""
-                   startFlag:@""
-                     endFlag:@""
-                    parseDom:@"//li/a"];
-    
-    [self makeBaseBlogEntity:array
-                      author:@""
-                     baseURL:@""
-                  archiveURL:@""
-                   startFlag:@""
-                     endFlag:@""
-                    parseDom:@"//li/a"];
-    
-    [self makeBaseBlogEntity:array
-                      author:@""
-                     baseURL:@""
-                  archiveURL:@""
-                   startFlag:@""
-                     endFlag:@""
-                    parseDom:@"//li/a"];
-    
-    [self makeBaseBlogEntity:array
-                      author:@""
-                     baseURL:@""
-                  archiveURL:@""
-                   startFlag:@""
-                     endFlag:@""
-                    parseDom:@"//li/a"];
-    
-    [self makeBaseBlogEntity:array
-                      author:@""
-                     baseURL:@""
-                  archiveURL:@""
-                   startFlag:@""
-                     endFlag:@""
-                    parseDom:@"//li/a"];
-    
+}
+
+-(void)makeWholeEntity:(NSMutableArray *)array
+                author:(NSString *)author
+               baseURL:(NSString *)baseURL
+            archiveURL:(NSString *)archiveURL
+{
+    FWBlogEntity *data= [[FWBlogEntity alloc] init];
+    data.dataType = FWDataType_WholePage;
+    data.author = author;
+    data.baseURL = baseURL;
+    data.archiveURL = archiveURL;
+    [array addObject:data];
 }
 
 - (void)makeBaseBlogEntity:(NSMutableArray *)array
