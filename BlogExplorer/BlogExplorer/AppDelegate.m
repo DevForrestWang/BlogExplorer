@@ -53,7 +53,7 @@
     [self loadRequest];
 }
 
-- (IBAction)clickTogo:(id)sender
+- (IBAction)clickGo:(id)sender
 {
     [self loadRequest];
 }

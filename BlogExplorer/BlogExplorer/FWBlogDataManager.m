@@ -50,25 +50,29 @@
     }
     
     [_parseDataAry removeAllObjects];
+    
+    NSMutableArray *baseAry = [NSMutableArray array];
+    NSMutableArray *pageAry = [NSMutableArray array];
+    
     for (FWBlogEntity *data in _urlAry) {
         if (data.dataType == FWDataType_WholePage) {
             [_parseDataAry addObject:data];
         }
         else if (data.dataType == FWDataType_BaseData)
         {
-            if ([self parseBaseData:data]) {
-                [_parseDataAry addObject:data];
-            }
+            [baseAry addObject:data];
         }
         else if (data.dataType == FWDataType_PageData)
         {
-            if ([self parsePageData:data]) {
-                [_parseDataAry addObject:data];
-            }
+            [pageAry addObject:data];
         }
     }
     
-    block(_parseDataAry);
+    __weak FWBlogDataManager *weekThis = self;
+    [self startThreadToParse:baseAry pageAry:pageAry blok:^(NSArray *resultAry) {
+        [weekThis.parseDataAry addObjectsFromArray:resultAry];
+        block(_parseDataAry);
+    }];
 }
 
 - (void)saveData
@@ -171,7 +175,6 @@
                      endFlag:@"<footer class=\"entry-meta\">"
                     parseDom:@"//li/a"];
     
-    /*
     [self makeBaseBlogEntity:array
                       author:@"破船之家"
                      baseURL:@"http://beyondvincent.com"
@@ -383,8 +386,6 @@
                    startFlag:@"<div id=\"blog-archives\">"
                      endFlag:@"<footer role=\"contentinfo\">"
                     parseDom:@"//li/a"];
-     
-     */
 }
 
 -(void)makeWholeEntity:(NSMutableArray *)array
@@ -421,24 +422,90 @@
 
 - (void) makePageData:(NSMutableArray *)array
 {
+}
+
+- (void) startThreadToParse:(NSArray *)baseAry
+                    pageAry:(NSArray *)pageAry
+                       blok:(void (^)(NSArray *resultAry))blok
+{
+    if (!blok) {
+        NSLog(@"%s, the block is empty", __FUNCTION__);
+        return;
+    }
     
+    NSMutableArray *resultAry = [NSMutableArray array];
+    dispatch_queue_t dispatchQueue = dispatch_queue_create("devforrestwang.com.queue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t dispatchGroup = dispatch_group_create();
+    __weak FWBlogDataManager *weekThis = self;
+    
+    // 计算每组解析数目，最少5个
+    NSInteger aryCount = [baseAry count];
+    NSInteger maxNum = MAX(aryCount/10, 5);
+    NSInteger count = (aryCount % maxNum == 0)? (aryCount / maxNum): ((aryCount / maxNum) + 1);
+    
+    for (NSInteger index = 0; index < count; index++) {
+        
+        NSRange range;
+        range.location = index * maxNum;
+        range.length = MIN(maxNum, (aryCount - index * maxNum));
+        NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[baseAry subarrayWithRange:range]];
+        
+        if ([tempAry count] <= 0) {
+            continue;
+        }
+        
+        dispatch_group_async(dispatchGroup, dispatchQueue, ^(){
+            for (FWBlogEntity *data in tempAry) {
+                if ([weekThis parseBaseData:data]) {
+                    [resultAry addObject:data];
+                }
+            }
+        });
+    }
+    
+    // 界面page类型
+    NSInteger pageAryCount = [pageAry count];
+    NSInteger pageMaxNum = MAX(pageAryCount/10, 5);
+    NSInteger pageCount = (pageAryCount % pageMaxNum == 0)? (pageAryCount / pageMaxNum): ((pageAryCount / pageMaxNum) + 1);
+    for (NSInteger index = 0; index < pageCount; index++) {
+        
+        NSRange range;
+        range.location = index * pageMaxNum;
+        range.length = MIN(pageMaxNum, (pageAryCount - index * pageMaxNum));
+        NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[pageAry subarrayWithRange:range]];
+        
+        if ([tempAry count] <= 0) {
+            continue;
+        }
+        
+        dispatch_group_async(dispatchGroup, dispatchQueue, ^(){
+            for (FWBlogEntity *data in tempAry) {
+                if ([weekThis parsePageData:data]) {
+                    [resultAry addObject:data];
+                }
+            }
+        });
+    }
+    
+    dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(){
+        blok(resultAry);
+    });
 }
 
 - (BOOL)parseBaseData:(FWBlogEntity *) blogData
 {
     NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:blogData.archiveURL]
                                                      encoding:NSUTF8StringEncoding error:nil];
+    NSString* tmpHtml = htmlContent;
     NSRange range = [htmlContent rangeOfString:blogData.startFlag];
-    if (range.length == 0) {
-        return NO;
+    if (range.length > 0) {
+        tmpHtml = [htmlContent substringFromIndex:range.location + range.length];
     }
-    NSString* tmpHtml = [htmlContent substringFromIndex:range.location + range.length];
     
     range = [tmpHtml rangeOfString:blogData.endFlag];
-    if (range.length == 0) {
-        return NO;
+    if (range.length > 0) {
+        tmpHtml = [tmpHtml substringToIndex:range.location];
     }
-    tmpHtml = [tmpHtml substringToIndex:range.location];
     
     NSData* dataHtml = [tmpHtml dataUsingEncoding:NSUTF8StringEncoding];
     TFHpple* xpathParser = [[TFHpple alloc] initWithHTMLData:dataHtml];

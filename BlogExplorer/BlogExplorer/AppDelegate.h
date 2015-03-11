@@ -24,7 +24,7 @@
 @property (weak) IBOutlet NSOutlineView *blogOutlineView;
 
 - (IBAction)enterGo:(id)sender;
-- (IBAction)clickTogo:(id)sender;
+- (IBAction)clickGo:(id)sender;
 - (IBAction)blogButonAction:(NSButton *)sender;
 
 @end

@@ -10,6 +10,9 @@
 		37FDE7611AADE9DA00DE7FB9 /* FWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */; };
 		74B87917162C3DBE0028D523 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B87916162C3DBE0028D523 /* Cocoa.framework */; };
 		74B87934162C3DF20028D523 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B87933162C3DF20028D523 /* WebKit.framework */; };
+		95719A581AB0209300662DF9 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 95719A571AB0209300662DF9 /* AppIcon.icns */; };
+		95719A5A1AB020C800662DF9 /* AppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 95719A591AB020C800662DF9 /* AppIcon.png */; };
+		95719A5E1AB0223C00662DF9 /* blogList.icns in Resources */ = {isa = PBXBuildFile; fileRef = 95719A5D1AB0223C00662DF9 /* blogList.icns */; };
 		95E0C7261AADA213002A8C55 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 95E0C7111AADA213002A8C55 /* AppDelegate.m */; };
 		95E0C7271AADA213002A8C55 /* BlogExplorer-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 95E0C7121AADA213002A8C55 /* BlogExplorer-Info.plist */; };
 		95E0C7291AADA213002A8C55 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 95E0C7161AADA213002A8C55 /* InfoPlist.strings */; };
@@ -32,6 +35,9 @@
 		74B8791A162C3DBE0028D523 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		74B8791B162C3DBE0028D523 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		74B87933162C3DF20028D523 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		95719A571AB0209300662DF9 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
+		95719A591AB020C800662DF9 /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon.png; sourceTree = "<group>"; };
+		95719A5D1AB0223C00662DF9 /* blogList.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = blogList.icns; sourceTree = "<group>"; };
 		95E0C7101AADA213002A8C55 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		95E0C7111AADA213002A8C55 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		95E0C7121AADA213002A8C55 /* BlogExplorer-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BlogExplorer-Info.plist"; sourceTree = "<group>"; };
@@ -104,6 +110,16 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
+		95719A561AB0209300662DF9 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				95719A5D1AB0223C00662DF9 /* blogList.icns */,
+				95719A591AB020C800662DF9 /* AppIcon.png */,
+				95719A571AB0209300662DF9 /* AppIcon.icns */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		95CF2B111AADA355007F5979 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +134,7 @@
 		95E0C70F1AADA212002A8C55 /* BlogExplorer */ = {
 			isa = PBXGroup;
 			children = (
+				95719A561AB0209300662DF9 /* images */,
 				95E0C71E1AADA213002A8C55 /* hpple */,
 				95CF2B111AADA355007F5979 /* Supporting Files */,
 				95E0C7101AADA213002A8C55 /* AppDelegate.h */,
@@ -197,7 +214,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95719A5A1AB020C800662DF9 /* AppIcon.png in Resources */,
 				95E0C7271AADA213002A8C55 /* BlogExplorer-Info.plist in Resources */,
+				95719A5E1AB0223C00662DF9 /* blogList.icns in Resources */,
+				95719A581AB0209300662DF9 /* AppIcon.icns in Resources */,
 				95E0C7291AADA213002A8C55 /* InfoPlist.strings in Resources */,
 				95E0C72A1AADA213002A8C55 /* MainMenu.xib in Resources */,
 			);
