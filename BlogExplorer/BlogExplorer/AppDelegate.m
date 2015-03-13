@@ -105,6 +105,11 @@
     }
 }
 
+- (IBAction)menuItemAuthor:(id)sender {
+    [_navbar setStringValue:@"http://devforrestwang.github.io/blog/2015/02/26/guan-yu-wo/"];
+    [self loadRequest];
+}
+
 #pragma mark - Private method
 - (void)loadRequest
 {

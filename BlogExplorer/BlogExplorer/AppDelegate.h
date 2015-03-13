@@ -25,5 +25,6 @@
 
 - (IBAction)enterGo:(id)sender;
 - (IBAction)blogButonAction:(NSButton *)sender;
+- (IBAction)menuItemAuthor:(id)sender;
 
 @end
