@@ -11,12 +11,15 @@
 #import "FWBlogEntity.h"
 #import "FWUtility.h"
 
-@interface AppDelegate () <NSOutlineViewDelegate, NSOutlineViewDataSource>
+@interface AppDelegate () <NSOutlineViewDelegate, NSOutlineViewDataSource, NSTableViewDelegate, NSTableViewDataSource>
 
 @property (nonatomic, assign) BOOL showBlogView;
 @property (nonatomic, strong) NSMutableArray* topLevelItems;
 @property (nonatomic, strong) NSMutableDictionary* blogDataDic;
 @property (nonatomic, strong) NSMutableDictionary* titleToURLDic;
+@property (nonatomic, strong) NSMutableArray* allTitleAry;
+@property (nonatomic, strong) NSMutableArray* tableTitleAry;
+
 @property (nonatomic, strong) FWBlogDataManager *blogManager;
 
 @property (nonatomic, strong) NSTimer *queryStartTimer;
@@ -39,6 +42,10 @@
     _topLevelItems = [NSMutableArray array];
     _blogDataDic = [NSMutableDictionary dictionary];
     _titleToURLDic = [NSMutableDictionary dictionary];
+    _allTitleAry = [NSMutableArray array];
+    _tableTitleAry = [NSMutableArray array];
+    
+    [_blogTableScrollView setHidden:NO];
     
     _blogManager = [[FWBlogDataManager alloc] init];
     [_blogManager initURLData];
@@ -92,6 +99,8 @@
         frame.origin.x = 0;
         frame.size.width = width;
         _webView.frame = frame;
+        
+        [_searchTextField setStringValue:@""];
     }
 }
 
@@ -105,20 +114,103 @@
     [[_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
 }
 
-- (void)startNewSearchQuery:(NSTimer*)theTimer
+- (void)refreshData:(NSArray *)dataAry
 {
-    NSLog(@"%@", [_searchTextField stringValue]);
-    [_queryStartTimer invalidate];
-    _queryStartTimer = NULL;
+    if ((!dataAry) || ([dataAry count] <= 0)) {
+        NSLog(@"%s, the dataAry is empty.", __FUNCTION__);
+        return;
+    }
+    
+    [_topLevelItems removeAllObjects];
+    [_blogDataDic removeAllObjects];
+    [_titleToURLDic removeAllObjects];
+    [_allTitleAry removeAllObjects];
+    
+    for (FWBlogEntity *indexEntity in dataAry) {
+        [_topLevelItems addObject:indexEntity.author];
+        
+        NSMutableArray* array = [NSMutableArray array];
+        for (FWBlogItemEntity *itemEntity in indexEntity.itemAry) {
+            [array addObject:itemEntity.title];
+            [_titleToURLDic setObject:itemEntity.url forKey:itemEntity.title];
+        }
+        
+        if ([array count] > 0) {
+            [_blogDataDic setObject:array forKey:indexEntity.author];
+            [_allTitleAry addObjectsFromArray:array];
+        }
+        else {
+            [_titleToURLDic setObject:indexEntity.baseURL forKey:indexEntity.author];
+            [_allTitleAry addObject:indexEntity.author];
+        }
+    }
+    
+    [_blogOutlineView sizeLastColumnToFit];
+    [_blogOutlineView reloadData];
+    [_blogOutlineView setFloatsGroupRows:YES];
+    [_blogOutlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
+    
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setDuration:0];
+    [_blogOutlineView expandItem:nil expandChildren:NO];
+    [NSAnimationContext endGrouping];
+}
+
+- (NSArray*)childrenForItem:(id)item
+{
+    NSMutableArray* tempAry = nil;
+    
+    if (item == nil) {
+        tempAry = _topLevelItems;
+    }
+    else {
+        tempAry = [_blogDataDic objectForKey:item];
+    }
+    
+    return tempAry;
 }
 
 - (void)searchTextDidChange:(NSNotification *)notification
 {
-#define QUERY_DELAY 0.25
+#define QUERY_DELAY 0.5
     if (_queryStartTimer) {
         [_queryStartTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:QUERY_DELAY]];
     } else {
         _queryStartTimer = [NSTimer scheduledTimerWithTimeInterval:QUERY_DELAY target:self selector:@selector(startNewSearchQuery:) userInfo:nil repeats:NO];
+    }
+}
+
+- (void)startNewSearchQuery:(NSTimer*)theTimer
+{
+    [self queryForIdentitiesByName:[_searchTextField stringValue]];
+    [_queryStartTimer invalidate];
+    _queryStartTimer = NULL;
+}
+
+- (void)queryForIdentitiesByName:(NSString *)name
+{
+    NSLog(@"%s, Name:%@", __FUNCTION__, name);
+    if ([FWUtility invalidString:name]) {
+        [_blogListScrollView setHidden:NO];
+        [_blogTableScrollView setHidden:YES];
+    }
+    else {
+        NSMutableArray *tempAry = [NSMutableArray array];
+        for (NSString *titleIndex in _allTitleAry) {
+            NSRange range = [titleIndex rangeOfString:name];
+            if (range.length > 0)  {
+                [tempAry addObject:titleIndex];
+            }
+        }
+        
+        if ([tempAry count] > 0) {
+            [_tableTitleAry removeAllObjects];
+            [_tableTitleAry addObjectsFromArray:tempAry];
+            
+            [_blogTableView reloadData];
+            [_blogListScrollView setHidden:YES];
+            [_blogTableScrollView setHidden:NO];
+        }
     }
 }
 
@@ -167,54 +259,6 @@
     //或者也可以加代码，新建一个tab打开
 }
 
-#pragma mark - NSTableViewDelegate
-- (void)refreshData:(NSArray *)dataAry
-{
-    if ((!dataAry) || ([dataAry count] <= 0)) {
-        NSLog(@"%s, the dataAry is empty.", __FUNCTION__);
-        return;
-    }
-    
-    for (FWBlogEntity *indexEntity in dataAry) {
-        [_topLevelItems addObject:indexEntity.author];
-        
-        NSMutableArray* array = [NSMutableArray array];
-        for (FWBlogItemEntity *itemEntity in indexEntity.itemAry) {
-            [array addObject:itemEntity.title];
-            [_titleToURLDic setObject:itemEntity.url forKey:itemEntity.title];
-        }
-        
-        if ([array count] > 0) {
-            [_blogDataDic setObject:array forKey:indexEntity.author];
-        }
-        else {
-            [_titleToURLDic setObject:indexEntity.baseURL forKey:indexEntity.author];
-        }
-    }
-    
-    [_blogOutlineView sizeLastColumnToFit];
-    [_blogOutlineView reloadData];
-    [_blogOutlineView setFloatsGroupRows:YES];
-    [_blogOutlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
-    
-    [NSAnimationContext beginGrouping];
-    [[NSAnimationContext currentContext] setDuration:0];
-    [_blogOutlineView expandItem:nil expandChildren:NO];
-    [NSAnimationContext endGrouping];
-}
-
-- (NSArray*)childrenForItem:(id)item
-{
-    NSArray* tempAry = nil;
-    if (item == nil) {
-        tempAry = _topLevelItems;
-    }
-    else {
-        tempAry = [_blogDataDic objectForKey:item];
-    }
-    return tempAry;
-}
-
 #pragma mark - NSOutlineViewDelegate NSOutlineViewDataSource
 - (NSInteger)outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
 {
@@ -251,6 +295,29 @@
             [_navbar setStringValue:strURL];
             [self loadRequest];
         }
+    }
+}
+
+#pragma mark - table deleage
+- (NSInteger)numberOfRowsInTableView:(NSTableView*)tableView
+{
+    return [_tableTitleAry count];
+}
+
+- (NSView*)tableView:(NSTableView*)tableView viewForTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row
+{
+    NSTableCellView* cellView = [tableView makeViewWithIdentifier:tableColumn.identifier owner:self];
+    cellView.textField.stringValue = [_tableTitleAry objectAtIndex:row];;
+    return cellView;
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)notification {
+    NSString *title = [_tableTitleAry objectAtIndex:[_blogTableView selectedRow]];
+    NSString* strURL = [_titleToURLDic objectForKey:title];
+    
+    if (![FWUtility invalidString:strURL]) {
+        [_navbar setStringValue:strURL];
+        [self loadRequest];
     }
 }
 

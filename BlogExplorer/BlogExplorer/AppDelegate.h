@@ -22,6 +22,10 @@
 @property (weak) IBOutlet NSSearchField *searchTextField;
 @property (weak) IBOutlet NSScrollView *blogListScrollView;
 @property (weak) IBOutlet NSOutlineView *blogOutlineView;
+@property (weak) IBOutlet NSScrollView *blogTableScrollView;
+@property (weak) IBOutlet NSTableView *blogTableView;
+
+
 
 - (IBAction)enterGo:(id)sender;
 - (IBAction)clickGo:(id)sender;
