@@ -11,6 +11,8 @@
 #import "FWBlogEntity.h"
 #import "FWUtility.h"
 
+#define LeftViewWidth  314
+
 @interface AppDelegate () <NSOutlineViewDelegate, NSOutlineViewDataSource, NSTableViewDelegate, NSTableViewDataSource>
 
 @property (nonatomic, assign) BOOL showBlogView;
@@ -76,11 +78,6 @@
     [self loadRequest];
 }
 
-- (IBAction)clickGo:(id)sender
-{
-    [self loadRequest];
-}
-
 - (IBAction)blogButonAction:(NSButton*)sender
 {
     _showBlogView = !_showBlogView;
@@ -91,8 +88,8 @@
         [_blogListScrollView setHidden:NO];
 
         CGRect frame = _webView.frame;
-        frame.origin.x = 314;
-        frame.size.width = width - 314;
+        frame.origin.x = LeftViewWidth;
+        frame.size.width = width - LeftViewWidth;
         _webView.frame = frame;
     }
     else {
@@ -221,6 +218,9 @@
 #pragma mark - webview deleage
 - (void)webView:(WebView*)sender didStartProvisionalLoadForFrame:(WebFrame*)frame
 {
+    [_spinnerView startAnimation:nil];
+    [_spinnerView setHidden:NO];
+    
     //开始加载,可以在这里加loading
     NSString* currentURL = [_webView mainFrameURL];
     [_navbar setStringValue:currentURL];
@@ -236,6 +236,9 @@
 
 - (void)webView:(WebView*)sender didFinishLoadForFrame:(WebFrame*)frame
 {
+    [_spinnerView stopAnimation:nil];
+    [_spinnerView setHidden:YES];
+    
     //设置前进，后退按钮的状态
     if (frame == [sender mainFrame]) {
         [_btnGoBack setEnabled:[sender canGoBack]];
