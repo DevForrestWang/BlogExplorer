@@ -115,6 +115,17 @@
     [[_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
 }
 
+-(void)loadRequest:(NSString *)title
+{
+    NSString* strURL = [_titleToURLDic objectForKey:title];
+    
+    if (![FWUtility invalidString:strURL]) {
+        [[_webView mainFrame] stopLoading];
+        [_navbar setStringValue:strURL];
+        [self loadRequest];
+    }
+}
+
 - (void)refreshData:(NSArray *)dataAry
 {
     if ((!dataAry) || ([dataAry count] <= 0)) {
@@ -296,12 +307,7 @@
 {
     if ([_blogOutlineView selectedRow] != -1) {
         NSString* title = [_blogOutlineView itemAtRow:[_blogOutlineView selectedRow]];
-        NSString* strURL = [_titleToURLDic objectForKey:title];
-        
-        if (![FWUtility invalidString:strURL]) {
-            [_navbar setStringValue:strURL];
-            [self loadRequest];
-        }
+        [self loadRequest:title];
     }
 }
 
@@ -320,12 +326,7 @@
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification {
     NSString *title = [_tableTitleAry objectAtIndex:[_blogTableView selectedRow]];
-    NSString* strURL = [_titleToURLDic objectForKey:title];
-    
-    if (![FWUtility invalidString:strURL]) {
-        [_navbar setStringValue:strURL];
-        [self loadRequest];
-    }
+    [self loadRequest:title];
 }
 
 @end
