@@ -14,14 +14,14 @@ typedef NS_ENUM(NSUInteger, FWDataTypeEnum) {
     FWDataType_PageData,
 };
 
-@interface FWBlogItemEntity : NSObject
+@interface FWBlogItemEntity : NSObject<NSCoding>
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *url;
 
 @end
 
-@interface FWBlogEntity : NSObject
+@interface FWBlogEntity : NSObject<NSCoding>
 
 @property (nonatomic, assign) FWDataTypeEnum dataType;    // 数据类型
 @property (nonatomic, strong) NSString *author;           // 作者

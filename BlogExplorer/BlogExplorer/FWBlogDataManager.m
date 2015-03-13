@@ -12,25 +12,29 @@
 
 @interface FWBlogDataManager ()
 
-@property (nonatomic, strong) NSMutableArray *urlAry;
-@property (nonatomic, strong) NSMutableArray *parseDataAry;
+@property (nonatomic, strong) NSMutableArray* urlAry;
+@property (nonatomic, strong) NSMutableArray* parseDataAry;
+@property (nonatomic, strong) NSString* filePath;
 
 @end
 
 @implementation FWBlogDataManager
 
-- (id) init
+- (id)init
 {
     self = [super init];
     if (self) {
         _urlAry = [NSMutableArray array];
         _parseDataAry = [NSMutableArray array];
+
+        NSString* documentDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        _filePath = [NSString stringWithFormat:@"%@/BlogExplorerData.plist", documentDir];
     }
-    
+
     return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 }
 
@@ -42,36 +46,56 @@
     [self makePageData:_urlAry];
 }
 
-- (void)parseData:(BOOL)forceParse block:(void (^)(NSArray *blogAry))block
+- (void)loadLocalData:(void (^)(NSArray* blogAry))block
 {
     if (!block) {
         NSLog(@"%s, the block is empty.", __FUNCTION__);
         return;
     }
-    
+
+    NSData* data = [[NSData alloc] initWithContentsOfFile:_filePath];
+    NSArray* dataAry = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if ([dataAry count] > 0) {
+        block(dataAry);
+    }
+}
+
+- (void)parseData:(BOOL)forceParse block:(void (^)(NSArray* blogAry))block
+{
+    if (!block) {
+        NSLog(@"%s, the block is empty.", __FUNCTION__);
+        return;
+    }
+
     [_parseDataAry removeAllObjects];
-    
-    NSMutableArray *baseAry = [NSMutableArray array];
-    NSMutableArray *pageAry = [NSMutableArray array];
-    
-    for (FWBlogEntity *data in _urlAry) {
+
+    NSMutableArray* baseAry = [NSMutableArray array];
+    NSMutableArray* pageAry = [NSMutableArray array];
+
+    for (FWBlogEntity* data in _urlAry) {
         if (data.dataType == FWDataType_WholePage) {
             [_parseDataAry addObject:data];
         }
-        else if (data.dataType == FWDataType_BaseData)
-        {
+        else if (data.dataType == FWDataType_BaseData) {
             [baseAry addObject:data];
         }
-        else if (data.dataType == FWDataType_PageData)
-        {
+        else if (data.dataType == FWDataType_PageData) {
             [pageAry addObject:data];
         }
     }
-    
-    __weak FWBlogDataManager *weekThis = self;
-    [self startThreadToParse:baseAry pageAry:pageAry blok:^(NSArray *resultAry) {
+
+    __weak FWBlogDataManager* weekThis = self;
+    [self startThreadToParse:baseAry pageAry:pageAry blok:^(NSArray* resultAry) {
         [weekThis.parseDataAry addObjectsFromArray:resultAry];
-        block(_parseDataAry);
+        
+        if ([weekThis.parseDataAry count] > 0) {
+            // 保存全部数据
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:weekThis.parseDataAry];
+            BOOL restlt = [data writeToFile:_filePath atomically:NO];
+            NSLog(@"%s, result:%d, doc:%@", __FUNCTION__, restlt, _filePath);
+            
+            block(_parseDataAry);
+        }
     }];
 }
 
@@ -80,76 +104,75 @@
 }
 
 #pragma mark - Private method
-- (void) makeWholePage:(NSMutableArray *)array
+- (void)makeWholePage:(NSMutableArray*)array
 {
     [self makeWholeEntity:array
                    author:@"objc中国"
                   baseURL:@"http://objccn.io/"
-               archiveURL: @"http://objccn.io/"];
-    
+               archiveURL:@"http://objccn.io/"];
+
     [self makeWholeEntity:array
                    author:@"Raywenderlich"
                   baseURL:@"http://www.raywenderlich.com/tutorials"
                archiveURL:@"http://www.raywenderlich.com/tutorials"];
-    
+
     [self makeWholeEntity:array
                    author:@"Nshipster"
                   baseURL:@"http://nshipster.com/"
                archiveURL:@"http://nshipster.com/"];
-    
+
     [self makeWholeEntity:array
                    author:@"objc"
                   baseURL:@"http://www.objc.io/"
                archiveURL:@"http://www.objc.io/"];
-    
+
     [self makeWholeEntity:array
                    author:@"拾光流"
                   baseURL:@"http://www.jianshu.com/collection/6d967bc213dd"
                archiveURL:@"http://www.jianshu.com/collection/6d967bc213dd"];
-    
+
     [self makeWholeEntity:array
                    author:@"大澎湃"
                   baseURL:@"http://www.jianshu.com/collection/e62c0b71606b"
                archiveURL:@"http://www.jianshu.com/collection/e62c0b71606b"];
-    
+
     [self makeWholeEntity:array
                    author:@"JanzTam"
                   baseURL:@"http://www.jianshu.com/collection/19dbe28002a3"
                archiveURL:@"http://www.jianshu.com/collection/19dbe28002a3"];
-    
+
     [self makeWholeEntity:array
                    author:@"Davi_choise凡UP"
                   baseURL:@"http://www.jianshu.com/collection/27e6fb9b84f7"
                archiveURL:@"http://www.jianshu.com/collection/27e6fb9b84f7"];
-    
+
     [self makeWholeEntity:array
                    author:@"RobinChao"
                   baseURL:@"http://www.jianshu.com/collection/2a6ff924a333"
                archiveURL:@"http://www.jianshu.com/collection/2a6ff924a333"];
-    
+
     [self makeWholeEntity:array
                    author:@"23Years"
                   baseURL:@"http://www.jianshu.com/collection/8beb0140cf67"
                archiveURL:@"http://www.jianshu.com/collection/8beb0140cf67"];
-    
+
     [self makeWholeEntity:array
                    author:@"JasonWu"
                   baseURL:@"http://www.jianshu.com/collection/fec73bf35ed3"
                archiveURL:@"http://www.jianshu.com/collection/fec73bf35ed3"];
-    
-    
+
     [self makeWholeEntity:array
                    author:@"季真"
                   baseURL:@"http://www.jianshu.com/collection/505442c4ef96"
                archiveURL:@"http://www.jianshu.com/collection/505442c4ef96"];
-    
+
     [self makeWholeEntity:array
                    author:@"Azen"
                   baseURL:@"http://www.jianshu.com/collection/8a0602419a76"
                archiveURL:@"http://www.jianshu.com/collection/8a0602419a76"];
 }
 
-- (void) makeBaseData:(NSMutableArray *)array
+- (void)makeBaseData:(NSMutableArray*)array
 {
     [self makeBaseBlogEntity:array
                       author:@"Forrest Wang"
@@ -158,7 +181,7 @@
                    startFlag:@"<section class=\"archives\">"
                      endFlag:@"<footer id=\"footer\""
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"唐乔"
                      baseURL:@"http://www.devtang.com"
@@ -166,7 +189,7 @@
                    startFlag:@"<div id=\"blog-archives\">"
                      endFlag:@"<aside class=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"Tony"
                      baseURL:@""
@@ -174,7 +197,7 @@
                    startFlag:@"<div class=\"pta-postarchives\">"
                      endFlag:@"<footer class=\"entry-meta\">"
                     parseDom:@"//li/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"破船之家"
                      baseURL:@"http://beyondvincent.com"
@@ -182,7 +205,7 @@
                    startFlag:@"<div class=\"mid-col\">"
                      endFlag:@"<footer id=\"footer\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"Rannie’s Page"
                      baseURL:@"http://rannie.github.io/"
@@ -190,7 +213,7 @@
                    startFlag:@"<div class=\"page-content\">"
                      endFlag:@"<footer class=\"site-footer\">"
                     parseDom:@"//h2/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"nvie.com"
                      baseURL:@"http://nvie.com/"
@@ -198,8 +221,7 @@
                    startFlag:@"<div class=\"site-container\">"
                      endFlag:@"<div id=\"footer\">"
                     parseDom:@"//h2/a"];
-    
-    
+
     [self makeBaseBlogEntity:array
                       author:@"Limboy"
                      baseURL:@"http://limboy.me/"
@@ -207,8 +229,7 @@
                    startFlag:@"<ul class=\"posts\">"
                      endFlag:@"<div id=\"footer\">"
                     parseDom:@"//li/a"];
-    
-    
+
     [self makeBaseBlogEntity:array
                       author:@"亚庆的Blog"
                      baseURL:@"http://billwang1990.github.io/"
@@ -216,8 +237,7 @@
                    startFlag:@"<div id=\"blog-archives\">"
                      endFlag:@"<aside class=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
-    
+
     [self makeBaseBlogEntity:array
                       author:@"Nonomori"
                      baseURL:@"http://nonomori.farbox.com/"
@@ -225,7 +245,7 @@
                    startFlag:@"<ul class=\"list_with_title container\">"
                      endFlag:@"<div id=\"footer\">"
                     parseDom:@"//li/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"不会开机的男孩"
                      baseURL:@"http://studentdeng.github.io"
@@ -233,7 +253,7 @@
                    startFlag:@"<article role=\"article\">"
                      endFlag:@"<aside class=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"代码手工艺人"
                      baseURL:@"http://joeyio.com"
@@ -241,7 +261,7 @@
                    startFlag:@"<div class=\"row-fluid\">"
                      endFlag:@"<footer>"
                     parseDom:@"//li/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"NICO"
                      baseURL:@"http://blog.inico.me"
@@ -249,8 +269,7 @@
                    startFlag:@"<div class=\"span12\">"
                      endFlag:@"<footer>"
                     parseDom:@"//li/a"];
-    
-    
+
     [self makeBaseBlogEntity:array
                       author:@"王中周的技术博客"
                      baseURL:@"http://foggry.com"
@@ -258,7 +277,7 @@
                    startFlag:@"<div id=\"blog-archives\">"
                      endFlag:@"<aside class=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"码农人生"
                      baseURL:@"http://msching.github.io"
@@ -266,7 +285,7 @@
                    startFlag:@"<section class=\"archives\">"
                      endFlag:@"<footer id=\"footer\" class=\"inner\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"煲仔饭"
                      baseURL:@"http://ivoryxiong.org"
@@ -274,7 +293,7 @@
                    startFlag:@"<ul class=\"listing\">"
                      endFlag:@"<div class=\"footer-wrap\">"
                     parseDom:@"//li/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"猫·仁波切"
                      baseURL:@"http://andelf.github.io"
@@ -282,7 +301,7 @@
                    startFlag:@"<div id=\"blog-archives\">"
                      endFlag:@"<aside class=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"Itty Bitty Labs"
                      baseURL:@"http://blog.ittybittyapps.com"
@@ -290,7 +309,7 @@
                    startFlag:@"<div id=\"blog-archives\">"
                      endFlag:@"<aside class=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"Adoption Curve Dot Net"
                      baseURL:@"http://adoptioncurve.net"
@@ -298,7 +317,7 @@
                    startFlag:@"<div id=\"blog-archives\">"
                      endFlag:@"<aside class=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"txx's blog"
                      baseURL:@"http://blog.txx.im"
@@ -306,7 +325,7 @@
                    startFlag:@"<div id=\"content\" class=\"inner\">"
                      endFlag:@"<footer id=\"footer\" class=\"inner\">"
                     parseDom:@"//h2/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"hSATAC"
                      baseURL:@"http://blog.hsatac.net"
@@ -314,7 +333,7 @@
                    startFlag:@"<div id=\"content\" class=\"inner\">"
                      endFlag:@"<footer id=\"footer\" class=\"inner\"><p>"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"里脊串的开发随笔"
                      baseURL:@"http://adad184.com"
@@ -322,7 +341,7 @@
                    startFlag:@"<section id=\"main\">"
                      endFlag:@"<aside id=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"成长的路上(Moonlight)"
                      baseURL:@""
@@ -330,7 +349,7 @@
                    startFlag:@"<div class=\"entrylist\">"
                      endFlag:@"<div id=\"sideBar\">"
                     parseDom:@"//div[@class='entrylistPosttitle']//a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"wayne23"
                      baseURL:@""
@@ -338,7 +357,7 @@
                    startFlag:@"<div class=\"entrylist\">"
                      endFlag:@"<div id=\"sideBar\">"
                     parseDom:@"//div[@class='entrylistPosttitle']//a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"念茜的博客"
                      baseURL:@""
@@ -346,7 +365,7 @@
                    startFlag:@"<div class=\"page-body\" itemprop=\"description\">"
                      endFlag:@"<footer id=\"footer\""
                     parseDom:@"//h2/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"言无不尽"
                      baseURL:@"http://tang3w.com"
@@ -354,7 +373,7 @@
                    startFlag:@"<ul class=\"posts\">"
                      endFlag:@"<div id=\"foot\">"
                     parseDom:@"//li/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"webfrogs' Homepage"
                      baseURL:@""
@@ -362,7 +381,7 @@
                    startFlag:@"<ul class=\"listing\">"
                      endFlag:@"<footer>"
                     parseDom:@"//li/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"Travis' Blog"
                      baseURL:@"http://imi.im"
@@ -370,7 +389,7 @@
                    startFlag:@"<div class=\"mp-scroll\">"
                      endFlag:@"</div>"
                     parseDom:@"//li/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"萧宸宇"
                      baseURL:@"http://iiiyu.com"
@@ -378,7 +397,7 @@
                    startFlag:@"<section id=\"main\">"
                      endFlag:@"<aside id=\"sidebar\">"
                     parseDom:@"//h1/a"];
-    
+
     [self makeBaseBlogEntity:array
                       author:@"Chun Tips"
                      baseURL:@"http://chun.tips"
@@ -388,12 +407,12 @@
                     parseDom:@"//li/a"];
 }
 
--(void)makeWholeEntity:(NSMutableArray *)array
-                author:(NSString *)author
-               baseURL:(NSString *)baseURL
-            archiveURL:(NSString *)archiveURL
+- (void)makeWholeEntity:(NSMutableArray*)array
+                 author:(NSString*)author
+                baseURL:(NSString*)baseURL
+             archiveURL:(NSString*)archiveURL
 {
-    FWBlogEntity *data= [[FWBlogEntity alloc] init];
+    FWBlogEntity* data = [[FWBlogEntity alloc] init];
     data.dataType = FWDataType_WholePage;
     data.author = author;
     data.baseURL = baseURL;
@@ -401,15 +420,15 @@
     [array addObject:data];
 }
 
-- (void)makeBaseBlogEntity:(NSMutableArray *)array
-                              author:(NSString *)author
-                             baseURL:(NSString *)baseURL
-                          archiveURL:(NSString *)archiveURL
-                           startFlag:(NSString *)startFlag
-                             endFlag:(NSString *)endFlag
-                            parseDom:(NSString *)parseDom
+- (void)makeBaseBlogEntity:(NSMutableArray*)array
+                    author:(NSString*)author
+                   baseURL:(NSString*)baseURL
+                archiveURL:(NSString*)archiveURL
+                 startFlag:(NSString*)startFlag
+                   endFlag:(NSString*)endFlag
+                  parseDom:(NSString*)parseDom
 {
-    FWBlogEntity *data = [[FWBlogEntity alloc] init];
+    FWBlogEntity* data = [[FWBlogEntity alloc] init];
     data.dataType = FWDataType_BaseData;
     data.author = author;
     data.baseURL = baseURL;
@@ -420,41 +439,41 @@
     [array addObject:data];
 }
 
-- (void) makePageData:(NSMutableArray *)array
+- (void)makePageData:(NSMutableArray*)array
 {
 }
 
-- (void) startThreadToParse:(NSArray *)baseAry
-                    pageAry:(NSArray *)pageAry
-                       blok:(void (^)(NSArray *resultAry))blok
+- (void)startThreadToParse:(NSArray*)baseAry
+                   pageAry:(NSArray*)pageAry
+                      blok:(void (^)(NSArray* resultAry))blok
 {
     if (!blok) {
         NSLog(@"%s, the block is empty", __FUNCTION__);
         return;
     }
-    
-    NSMutableArray *resultAry = [NSMutableArray array];
+
+    NSMutableArray* resultAry = [NSMutableArray array];
     dispatch_queue_t dispatchQueue = dispatch_queue_create("devforrestwang.com.queue", DISPATCH_QUEUE_CONCURRENT);
     dispatch_group_t dispatchGroup = dispatch_group_create();
-    __weak FWBlogDataManager *weekThis = self;
-    
+    __weak FWBlogDataManager* weekThis = self;
+
     // 计算每组解析数目，最少5个
     NSInteger aryCount = [baseAry count];
-    NSInteger maxNum = MAX(aryCount/10, 5);
-    NSInteger count = (aryCount % maxNum == 0)? (aryCount / maxNum): ((aryCount / maxNum) + 1);
-    
+    NSInteger maxNum = MAX(aryCount / 10, 5);
+    NSInteger count = (aryCount % maxNum == 0) ? (aryCount / maxNum) : ((aryCount / maxNum) + 1);
+
     for (NSInteger index = 0; index < count; index++) {
-        
+
         NSRange range;
         range.location = index * maxNum;
         range.length = MIN(maxNum, (aryCount - index * maxNum));
-        NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[baseAry subarrayWithRange:range]];
-        
+        NSMutableArray* tempAry = [NSMutableArray arrayWithArray:[baseAry subarrayWithRange:range]];
+
         if ([tempAry count] <= 0) {
             continue;
         }
-        
-        dispatch_group_async(dispatchGroup, dispatchQueue, ^(){
+
+        dispatch_group_async(dispatchGroup, dispatchQueue, ^() {
             for (FWBlogEntity *data in tempAry) {
                 if ([weekThis parseBaseData:data]) {
                     [resultAry addObject:data];
@@ -462,23 +481,23 @@
             }
         });
     }
-    
+
     // 界面page类型
     NSInteger pageAryCount = [pageAry count];
-    NSInteger pageMaxNum = MAX(pageAryCount/10, 5);
-    NSInteger pageCount = (pageAryCount % pageMaxNum == 0)? (pageAryCount / pageMaxNum): ((pageAryCount / pageMaxNum) + 1);
+    NSInteger pageMaxNum = MAX(pageAryCount / 10, 5);
+    NSInteger pageCount = (pageAryCount % pageMaxNum == 0) ? (pageAryCount / pageMaxNum) : ((pageAryCount / pageMaxNum) + 1);
     for (NSInteger index = 0; index < pageCount; index++) {
-        
+
         NSRange range;
         range.location = index * pageMaxNum;
         range.length = MIN(pageMaxNum, (pageAryCount - index * pageMaxNum));
-        NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[pageAry subarrayWithRange:range]];
-        
+        NSMutableArray* tempAry = [NSMutableArray arrayWithArray:[pageAry subarrayWithRange:range]];
+
         if ([tempAry count] <= 0) {
             continue;
         }
-        
-        dispatch_group_async(dispatchGroup, dispatchQueue, ^(){
+
+        dispatch_group_async(dispatchGroup, dispatchQueue, ^() {
             for (FWBlogEntity *data in tempAry) {
                 if ([weekThis parsePageData:data]) {
                     [resultAry addObject:data];
@@ -486,48 +505,49 @@
             }
         });
     }
-    
-    dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^(){
+
+    dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^() {
         blok(resultAry);
     });
 }
 
-- (BOOL)parseBaseData:(FWBlogEntity *) blogData
+- (BOOL)parseBaseData:(FWBlogEntity*)blogData
 {
     NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:blogData.archiveURL]
-                                                     encoding:NSUTF8StringEncoding error:nil];
+                                                     encoding:NSUTF8StringEncoding
+                                                        error:nil];
     NSString* tmpHtml = htmlContent;
     NSRange range = [htmlContent rangeOfString:blogData.startFlag];
     if (range.length > 0) {
         tmpHtml = [htmlContent substringFromIndex:range.location + range.length];
     }
-    
+
     range = [tmpHtml rangeOfString:blogData.endFlag];
     if (range.length > 0) {
         tmpHtml = [tmpHtml substringToIndex:range.location];
     }
-    
+
     NSData* dataHtml = [tmpHtml dataUsingEncoding:NSUTF8StringEncoding];
     TFHpple* xpathParser = [[TFHpple alloc] initWithHTMLData:dataHtml];
     NSArray* elements = [xpathParser searchWithXPathQuery:blogData.parseDom];
     NSMutableArray* resultAry = [[NSMutableArray alloc] init];
-    
+
     for (TFHppleElement* element in elements) {
-        
-        FWBlogItemEntity *data = [[FWBlogItemEntity alloc] init];
+
+        FWBlogItemEntity* data = [[FWBlogItemEntity alloc] init];
         data.title = element.content;
-        
+
         NSDictionary* elementContent = [element attributes];
         data.url = [blogData.baseURL stringByAppendingString:[elementContent objectForKey:@"href"]];
-        
+
         [resultAry addObject:data];
     }
-    
+
     blogData.itemAry = resultAry;
     return YES;
 }
 
-- (BOOL)parsePageData:(FWBlogEntity *) blogData
+- (BOOL)parsePageData:(FWBlogEntity*)blogData
 {
     return NO;
 }

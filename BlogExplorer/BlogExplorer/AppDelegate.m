@@ -51,6 +51,10 @@
     [_blogManager initURLData];
     
     __weak AppDelegate *weekThis = self;
+    [_blogManager loadLocalData:^(NSArray *blogAry) {
+        [weekThis refreshData:blogAry];
+    }];
+    
     [_blogManager parseData:YES block:^(NSArray *blogAry) {
         [weekThis refreshData:blogAry];
     }];

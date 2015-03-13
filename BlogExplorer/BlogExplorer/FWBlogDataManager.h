@@ -11,6 +11,7 @@
 @interface FWBlogDataManager : NSObject
 
 - (void)initURLData;
+- (void)loadLocalData:(void (^)(NSArray *blogAry))block;
 - (void)parseData:(BOOL)forceParse block:(void (^)(NSArray *blogAry))block;
 - (void)saveData;
 @end
