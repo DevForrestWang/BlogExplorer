@@ -41,7 +41,7 @@
 - (void)initURLData
 {
     [_urlAry removeAllObjects];
-//    [self makeWholePage:_urlAry];
+    [self makeWholePage:_urlAry];
     [self makeBaseData:_urlAry];
     [self makePageData:_urlAry];
 }
@@ -441,11 +441,12 @@
     /*
     [self makeBaseBlogEntity:array
                       author:@""
-                     baseURL:@""
-                  archiveURL:@""
+                     baseURL:@"http://gracelancy.com/"
+                  archiveURL:@"http://gracelancy.com/blog/archives/"
                    startFlag:@""
                      endFlag:@""
                     parseDom:@""];
+    
     
     [self makeBaseBlogEntity:array
                       author:@""
