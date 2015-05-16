@@ -41,7 +41,7 @@
 - (void)initURLData
 {
     [_urlAry removeAllObjects];
-    [self makeWholePage:_urlAry];
+//    [self makeWholePage:_urlAry];
     [self makeBaseData:_urlAry];
     [self makePageData:_urlAry];
 }
@@ -405,6 +405,66 @@
                    startFlag:@"<div id=\"blog-archives\">"
                      endFlag:@"<footer role=\"contentinfo\">"
                     parseDom:@"//li/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"Xcode Dev"
+                     baseURL:@"http://blog.xcodev.com/"
+                  archiveURL:@"http://blog.xcodev.com/blog/archives/"
+                   startFlag:@"<div id=\"blog-archives\">"
+                     endFlag:@"<aside class=\"sidebar thirds\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"Wonderffee's Blog"
+                     baseURL:@"http://wonderffee.github.io/"
+                  archiveURL:@"http://wonderffee.github.io/blog/archives/"
+                   startFlag:@"<div id=\"blog-archives\">"
+                     endFlag:@"<aside class=\"sidebar\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"nixzhu"
+                     baseURL:@"http://nixzhu.me/"
+                  archiveURL:@"http://nixzhu.me/archive"
+                   startFlag:@"<div class=\"blog\">"
+                     endFlag:@"<div class=\"scriptogram-link\">"
+                    parseDom:@"//h3/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"Lancy's Blog"
+                     baseURL:@"http://gracelancy.com/"
+                  archiveURL:@"http://gracelancy.com/blog/archives/"
+                   startFlag:@"<div id=\"content\" class=\"inner\">"
+                     endFlag:@"<footer id=\"footer\" class=\"inner\">"
+                    parseDom:@"//h2/a"];
+    
+    /*
+    [self makeBaseBlogEntity:array
+                      author:@""
+                     baseURL:@""
+                  archiveURL:@""
+                   startFlag:@""
+                     endFlag:@""
+                    parseDom:@""];
+    
+    [self makeBaseBlogEntity:array
+                      author:@""
+                     baseURL:@""
+                  archiveURL:@""
+                   startFlag:@""
+                     endFlag:@""
+                    parseDom:@""];
+    
+    [self makeBaseBlogEntity:array
+                      author:@""
+                     baseURL:@""
+                  archiveURL:@""
+                   startFlag:@""
+                     endFlag:@""
+                    parseDom:@""];
+     */
+    
+    
 }
 
 - (void)makeWholeEntity:(NSMutableArray*)array
