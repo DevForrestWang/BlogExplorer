@@ -47,7 +47,8 @@
     _allTitleAry = [NSMutableArray array];
     _tableTitleAry = [NSMutableArray array];
     
-    [_blogTableScrollView setHidden:NO];
+    [_blogTableScrollView setHidden:YES];
+    [_blogListScrollView setHidden:NO];
     
     _blogManager = [[FWBlogDataManager alloc] init];
     [_blogManager initURLData];
@@ -64,7 +65,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(searchTextDidChange:)
                                                  name:NSControlTextDidChangeNotification
-                                               object:_searchTextField];
+                                            object:_searchTextField];
 }
 
 - (void) dealloc
@@ -84,25 +85,26 @@
     CGFloat width = _window.frame.size.width;
 
     if (_showBlogView) {
-        [_searchTextField setHidden:NO];
         [_blogListScrollView setHidden:NO];
-
+        [_searchTextField setHidden:NO];
+        
         CGRect frame = _webView.frame;
         frame.origin.x = LeftViewWidth;
         frame.size.width = width - LeftViewWidth;
         _webView.frame = frame;
     }
     else {
-        [_searchTextField setHidden:YES];
         [_blogListScrollView setHidden:YES];
-
+        [_searchTextField setHidden:YES];
+        [_searchTextField setStringValue:@""];
+        
         CGRect frame = _webView.frame;
         frame.origin.x = 0;
         frame.size.width = width;
         _webView.frame = frame;
-        
-        [_searchTextField setStringValue:@""];
     }
+    
+    [_blogTableScrollView setHidden:YES];
 }
 
 - (IBAction)menuItemAuthor:(id)sender {

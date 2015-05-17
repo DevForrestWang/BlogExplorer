@@ -437,35 +437,6 @@
                    startFlag:@"<div id=\"content\" class=\"inner\">"
                      endFlag:@"<footer id=\"footer\" class=\"inner\">"
                     parseDom:@"//h2/a"];
-    
-    /*
-    [self makeBaseBlogEntity:array
-                      author:@""
-                     baseURL:@"http://gracelancy.com/"
-                  archiveURL:@"http://gracelancy.com/blog/archives/"
-                   startFlag:@""
-                     endFlag:@""
-                    parseDom:@""];
-    
-    
-    [self makeBaseBlogEntity:array
-                      author:@""
-                     baseURL:@""
-                  archiveURL:@""
-                   startFlag:@""
-                     endFlag:@""
-                    parseDom:@""];
-    
-    [self makeBaseBlogEntity:array
-                      author:@""
-                     baseURL:@""
-                  archiveURL:@""
-                   startFlag:@""
-                     endFlag:@""
-                    parseDom:@""];
-     */
-    
-    
 }
 
 - (void)makeWholeEntity:(NSMutableArray*)array
