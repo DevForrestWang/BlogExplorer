@@ -473,6 +473,14 @@
 
 - (void)makePageData:(NSMutableArray*)array
 {
+    /*
+     1/http://www.cnblogs.com/biosli/default.html?page=2 获取总页数
+     
+     
+     
+     
+     
+     */
 }
 
 - (void)startThreadToParse:(NSArray*)baseAry
