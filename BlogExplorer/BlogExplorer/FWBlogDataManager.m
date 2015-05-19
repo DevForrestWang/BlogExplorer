@@ -437,6 +437,38 @@
                    startFlag:@"<div id=\"content\" class=\"inner\">"
                      endFlag:@"<footer id=\"footer\" class=\"inner\">"
                     parseDom:@"//h2/a"];
+
+    [self makeBaseBlogEntity:array
+                      author:@"Luke's Homepage"
+                     baseURL:@""
+                  archiveURL:@"http://geeklu.com/categories/"
+                   startFlag:@"<ul class=\"listing\">"
+                     endFlag:@"<p></p>"
+                    parseDom:@"//li/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"不掏蜂窝的熊"
+                     baseURL:@""
+                  archiveURL:@"http://www.hotobear.com/?page_id=810"
+                   startFlag:@"<ul class=\"jaw_widget\">"
+                     endFlag:@"<input type=\"hidden\" id=\"widget-jal_widget-1-fx_in\" name=\"widget-jal_widget[1][fx_in]\" class=\"fx_in\" value=\"fadeIn\">"
+                    parseDom:@"//ul/li/ul/li/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"土土哥的技术Blog"
+                     baseURL:@"http://tutuge.me/"
+                  archiveURL:@"http://tutuge.me/archives/"
+                   startFlag:@"<div class=\"archives\">"
+                     endFlag:@"<aside id=\"sidebar\">"
+                    parseDom:@"//h1/a"];
+    
+    [self makeBaseBlogEntity:array
+                      author:@"庞海礁的个人空间"
+                     baseURL:@""
+                  archiveURL:@"http://www.olinone.com/"
+                   startFlag:@"<div id=\"primary\" class=\"site-content\">"
+                     endFlag:@"<div id=\"secondary\" class=\"widget-area\" role=\"complementary\">"
+                    parseDom:@"//h2/a"];
 }
 
 - (void)makeWholeEntity:(NSMutableArray*)array
