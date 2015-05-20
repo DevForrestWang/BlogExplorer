@@ -43,6 +43,7 @@
     [_urlAry removeAllObjects];
     [self makeWholePage:_urlAry];
     [self makeBaseData:_urlAry];
+    [self makeTotlePageData:_urlAry];
     [self makePageData:_urlAry];
 }
 
@@ -503,16 +504,47 @@
     [array addObject:data];
 }
 
+- (void)makeTotlePageData:(NSMutableArray *)array {
+    /*
+    NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://onevcat.com/#blog"]
+                                                     encoding:NSUTF8StringEncoding
+                                                        error:nil];
+
+    NSData* dataHtml = [htmlContent dataUsingEncoding:NSUTF8StringEncoding];
+    TFHpple* xpathParser = [[TFHpple alloc] initWithHTMLData:dataHtml];
+    NSArray* elements = [xpathParser searchWithXPathQuery:@"//nav[@class='pagination']/span[@class='pagination__page-number']"];
+    NSInteger pageNumber = 0;
+    
+    for (TFHppleElement* element in elements) {
+        
+        NSString *content = element.content;
+        if (content && [content length] > 0) {
+            NSArray *array = [content componentsSeparatedByString:@"/"];
+            if ([array count]> 1) {
+                pageNumber = [array[1] integerValue];
+                break;
+            }
+        }
+    }
+    
+    for (NSInteger index = 1; index <= 1; index++) {
+        NSString *pageURL = [NSString stringWithFormat:@"http://onevcat.com/page/%ld/#blog", (long)index];
+        NSLog(@"pageURL:%@", pageURL);
+        
+        [self makeBaseBlogEntity:array
+                          author:@"OneV's Den"
+                         baseURL:@"http://onevcat.com"
+                      archiveURL:pageURL
+                       startFlag:@"<ol class=\"post-list\">"
+                         endFlag:@"<hr class=\"post-list__divider \">"
+                        parseDom:@"//li/h2/a"];
+        
+    }
+     */
+}
+
 - (void)makePageData:(NSMutableArray*)array
 {
-    /*
-     1/http://www.cnblogs.com/biosli/default.html?page=2 获取总页数
-     
-     
-     
-     
-     
-     */
 }
 
 - (void)startThreadToParse:(NSArray*)baseAry
