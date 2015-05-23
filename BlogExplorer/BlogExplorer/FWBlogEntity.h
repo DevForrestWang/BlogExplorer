@@ -27,6 +27,7 @@ typedef NS_ENUM(NSUInteger, FWDataTypeEnum) {
 @property (nonatomic, strong) NSString *author;           // 作者
 @property (nonatomic, strong) NSString *baseURL;          // 基本URL，
 @property (nonatomic, strong) NSString *archiveURL;       // 索引URL
+@property (nonatomic, strong) NSArray *archiveURLAry;     // 索引RUL数组
 
 @property (nonatomic, strong) NSString *startFlag;        // 字符串开始标志
 @property (nonatomic, strong) NSString *endFlag;          // 字符串结束标志

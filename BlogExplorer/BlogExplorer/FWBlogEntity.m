@@ -41,6 +41,7 @@
     [aCoder encodeObject:self.author forKey:@"author"];
     [aCoder encodeObject:self.baseURL forKey:@"baseURL"];
     [aCoder encodeObject:self.archiveURL forKey:@"archiveURL"];
+    [aCoder encodeObject:self.archiveURLAry forKey:@"archiveURLAry"];
     [aCoder encodeObject:self.startFlag forKey:@"startFlag"];
     [aCoder encodeObject:self.endFlag forKey:@"endFlag"];
     [aCoder encodeObject:self.parseDom forKey:@"parseDom"];
@@ -54,6 +55,7 @@
         self.author = [aDecoder decodeObjectForKey:@"author"];
         self.baseURL = [aDecoder decodeObjectForKey:@"baseURL"];
         self.archiveURL = [aDecoder decodeObjectForKey:@"archiveURL"];
+        self.archiveURLAry = [aDecoder decodeObjectForKey:@"archiveURLAry"];
         self.startFlag = [aDecoder decodeObjectForKey:@"startFlag"];
         self.endFlag = [aDecoder decodeObjectForKey:@"endFlag"];
         self.parseDom = [aDecoder decodeObjectForKey:@"parseDom"];
@@ -65,7 +67,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%s, dataType:%lu, author:%@, baseURL:%@, archiveURL:%@, startFlag:%@, endFlag:%@, parseDom:%@, item:%@", __FUNCTION__, _dataType, _author, _baseURL, _archiveURL, _startFlag, _endFlag, _parseDom, _itemAry];
+    return [NSString stringWithFormat:@"%s, dataType:%lu, author:%@, baseURL:%@, archiveURL:%@, _archiveURLAry:%@, startFlag:%@, endFlag:%@, parseDom:%@, item:%@", __FUNCTION__, _dataType, _author, _baseURL, _archiveURL, _archiveURLAry, _startFlag, _endFlag, _parseDom, _itemAry];
 }
 
 @end

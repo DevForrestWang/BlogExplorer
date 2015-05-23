@@ -505,18 +505,181 @@
 }
 
 - (void)makeTotlePageData:(NSMutableArray *)array {
-    /*
-    NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://onevcat.com/#blog"]
+    
+    NSArray *oneCatAry = [self totalPageURL:@"http://onevcat.com/#blog"
+                              parseTotalDom:@"//nav[@class='pagination']/span[@class='pagination__page-number']"
+                                  formatURL:@"http://onevcat.com/page/%ld/#blog"];
+    if ([oneCatAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"OneV's Den"
+                              baseURL:@"http://onevcat.com"
+                        archiveURLAry:oneCatAry
+                            startFlag:@"<ol class=\"post-list\">"
+                              endFlag:@"<hr class=\"post-list__divider \">"
+                             parseDom:@"//li/h2/a"];
+    }
+    
+    NSArray *kooFrankAry = [self totalPageURL:@"http://koofrank.com/#blog"
+                                parseTotalDom:@"//nav[@class='pagination']/span[@class='pagination__page-number']"
+                                    formatURL:@"http://koofrank.com/page/%ld/#blog"];
+    if ([kooFrankAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"KooFrank's Den"
+                              baseURL:@"http://koofrank.com"
+                        archiveURLAry:kooFrankAry
+                            startFlag:@"<ol class=\"post-list\">"
+                              endFlag:@"<hr class=\"post-list__divider \">"
+                             parseDom:@"//li/h2/a"];
+    }
+    
+    NSArray *biosliAry = [self fixedPageNumberURL:4
+                                        formatURL:@"http://www.cnblogs.com/biosli/default.html?page=%ld"];
+    if ([biosliAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"摇滚诗人"
+                              baseURL:@""
+                        archiveURLAry:biosliAry
+                            startFlag:@"<div class=\"forFlow\">"
+                              endFlag:@"<div class=\"topicListFooter\">"
+                             parseDom:@"//div[@class='postTitle']/a"];
+    }
+    
+    
+    NSArray *itWorkAry = [self fixedPageNumberURL:7
+                                        formatURL:@"http://helloitworks.com/page/%ld"];
+    if ([itWorkAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"Hello,it works"
+                              baseURL:@""
+                        archiveURLAry:itWorkAry
+                            startFlag:@"<div id=\"main\">"
+                              endFlag:@"<div id=\"sidebar\">"
+                             parseDom:@"//div[@class='post']/h2/a"];
+    }
+    
+    
+    NSArray *yifeiyangAry = [self fixedPageNumberURL:12
+                                           formatURL:@"http://www.yifeiyang.net/page/%ld/"];
+    if ([yifeiyangAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"易飞扬"
+                              baseURL:@""
+                        archiveURLAry:yifeiyangAry
+                            startFlag:@"<div id=\"content-body\">"
+                              endFlag:@"<div class=\"content-sidebar\">"
+                             parseDom:@"//div/h2/a[@rel='bookmark']"];
+    }
+    
+    NSArray *allenMemosAry = [self fixedPageNumberURL:1
+                                            formatURL:@"http://imallen.com/"];
+    if ([allenMemosAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"Allen's Memos"
+                              baseURL:@"http://imallen.com/"
+                        archiveURLAry:allenMemosAry
+                            startFlag:@"<main id=\"content\" class=\"content\" role=\"main\">"
+                              endFlag:@"<footer class=\"site-footer clearfix\">"
+                             parseDom:@"//article/header/h2/a"];
+    }
+    
+    NSArray *pjk129Ary = [self fixedPageNumberURL:4
+                                        formatURL:@"http://blog.csdn.net/pjk1129/article/list/%ld"];
+    if ([pjk129Ary count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"pjk1129专栏"
+                              baseURL:@"http://blog.csdn.net"
+                        archiveURLAry:pjk129Ary
+                            startFlag:@"<div id=\"article_list\" class=\"contents\">"
+                              endFlag:@"<div id=\"papelist\" class=\"pagelist\">"
+                             parseDom:@"//h1/span/a"];
+    }
+    
+    NSArray *xfzlAry = [self fixedPageNumberURL:3
+                                      formatURL:@"http://blog.csdn.net/duxinfeng2010/article/list/%ld"];
+    if ([xfzlAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"新风作浪"
+                              baseURL:@"http://blog.csdn.net"
+                        archiveURLAry:xfzlAry
+                            startFlag:@"<div id=\"article_list\" class=\"contents\">"
+                              endFlag:@"<div id=\"papelist\" class=\"pagelist\">"
+                             parseDom:@"//h1/span/a"];
+    }
+    
+    NSArray *fishWaterAry = [self fixedPageNumberURL:3
+                                           formatURL:@"http://blog.csdn.net/yujianxiang666/article/list/%ld"];
+    if ([fishWaterAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"如鱼得水"
+                              baseURL:@"http://blog.csdn.net"
+                        archiveURLAry:fishWaterAry
+                            startFlag:@"<div id=\"article_list\" class=\"contents\">"
+                              endFlag:@"<div id=\"papelist\" class=\"pagelist\">"
+                             parseDom:@"//h1/span/a"];
+    }
+    
+    NSArray *liuWeiAry = [self fixedPageNumberURL:2
+                                        formatURL:@"http://blog.csdn.net/iukey/article/list/%ld"];
+    if ([liuWeiAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"刘伟Derick-IOS"
+                              baseURL:@"http://blog.csdn.net"
+                        archiveURLAry:liuWeiAry
+                            startFlag:@"<div id=\"article_list\" class=\"contents\">"
+                              endFlag:@"<div id=\"papelist\" class=\"pagelist\">"
+                             parseDom:@"//h1/span/a"];
+    }
+    
+    NSArray *rannieRAry = [self fixedPageNumberURL:2
+                                         formatURL:@"http://blog.csdn.net/ran0809/article/list/%ld"];
+    if ([rannieRAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"RannieR"
+                              baseURL:@"http://blog.csdn.net"
+                        archiveURLAry:rannieRAry
+                            startFlag:@"<div id=\"article_list\" class=\"contents\">"
+                              endFlag:@"<div id=\"papelist\" class=\"pagelist\">"
+                             parseDom:@"//h1/span/a"];
+    }
+    
+    NSArray *xcydAry = [self fixedPageNumberURL:11
+                                      formatURL:@"http://blog.csdn.net/superchaoxian/article/list/%ld"];
+    if ([xcydAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"小菜移动互联网之路"
+                              baseURL:@"http://blog.csdn.net"
+                        archiveURLAry:xcydAry
+                            startFlag:@"<div id=\"article_list\" class=\"contents\">"
+                              endFlag:@"<div id=\"papelist\" class=\"pagelist\">"
+                             parseDom:@"//h1/span/a"];
+    }
+    
+    NSArray *rzfAry = [self fixedPageNumberURL:3
+                                     formatURL:@"http://blog.csdn.net/totogo2010/article/list/%ld"];
+    if ([rzfAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"容芳志专栏"
+                              baseURL:@"http://blog.csdn.net"
+                        archiveURLAry:rzfAry
+                            startFlag:@"<div id=\"article_list\" class=\"contents\">"
+                              endFlag:@"<div id=\"papelist\" class=\"pagelist\">"
+                             parseDom:@"//h1/span/a"];
+    }
+}
+
+- (NSArray *)totalPageURL:(NSString *)basePage
+            parseTotalDom:(NSString *)parseTotalDom
+                formatURL:(NSString *)formatURL {
+    NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:basePage]
                                                      encoding:NSUTF8StringEncoding
                                                         error:nil];
-
+    
     NSData* dataHtml = [htmlContent dataUsingEncoding:NSUTF8StringEncoding];
     TFHpple* xpathParser = [[TFHpple alloc] initWithHTMLData:dataHtml];
-    NSArray* elements = [xpathParser searchWithXPathQuery:@"//nav[@class='pagination']/span[@class='pagination__page-number']"];
+    NSArray* elements = [xpathParser searchWithXPathQuery:parseTotalDom];
     NSInteger pageNumber = 0;
     
     for (TFHppleElement* element in elements) {
-        
         NSString *content = element.content;
         if (content && [content length] > 0) {
             NSArray *array = [content componentsSeparatedByString:@"/"];
@@ -527,20 +690,36 @@
         }
     }
     
-    for (NSInteger index = 1; index <= 1; index++) {
-        NSString *pageURL = [NSString stringWithFormat:@"http://onevcat.com/page/%ld/#blog", (long)index];
-        NSLog(@"pageURL:%@", pageURL);
-        
-        [self makeBaseBlogEntity:array
-                          author:@"OneV's Den"
-                         baseURL:@"http://onevcat.com"
-                      archiveURL:pageURL
-                       startFlag:@"<ol class=\"post-list\">"
-                         endFlag:@"<hr class=\"post-list__divider \">"
-                        parseDom:@"//li/h2/a"];
-        
+    return [self fixedPageNumberURL:pageNumber formatURL:formatURL];
+}
+
+- (NSArray *)fixedPageNumberURL:(NSInteger)totalNum formatURL:(NSString *)formatURL {
+    NSMutableArray *urlAry = [NSMutableArray array];
+    for (NSInteger index = 1; index <= totalNum; index++) {
+        NSString *pageURL = [NSString stringWithFormat:formatURL, (long)index];
+        [urlAry addObject:pageURL];
     }
-     */
+    
+    return urlAry;
+}
+
+- (void)makeTotalPageBlogEntity:(NSMutableArray*)array
+                         author:(NSString*)author
+                        baseURL:(NSString*)baseURL
+                  archiveURLAry:(NSArray*)archiveURLAry
+                      startFlag:(NSString*)startFlag
+                        endFlag:(NSString*)endFlag
+                       parseDom:(NSString*)parseDom
+{
+    FWBlogEntity* data = [[FWBlogEntity alloc] init];
+    data.dataType = FWDataType_PageData;
+    data.author = author;
+    data.baseURL = baseURL;
+    data.archiveURLAry = archiveURLAry;
+    data.startFlag = startFlag;
+    data.endFlag = endFlag;
+    data.parseDom = parseDom;
+    [array addObject:data];
 }
 
 - (void)makePageData:(NSMutableArray*)array
@@ -617,7 +796,23 @@
 
 - (BOOL)parseBaseData:(FWBlogEntity*)blogData
 {
-    NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:blogData.archiveURL]
+    blogData.itemAry = [self parseSinglePage:blogData url:blogData.archiveURL];
+    return YES;
+}
+
+- (BOOL)parsePageData:(FWBlogEntity*)blogData
+{
+    NSMutableArray *itemAry = [NSMutableArray array];
+    for (NSString *indexURL in blogData.archiveURLAry) {
+        [itemAry addObjectsFromArray:[self parseSinglePage:blogData url:indexURL]];
+    }
+    
+    blogData.itemAry = itemAry;
+    return YES;
+}
+
+- (NSArray *)parseSinglePage:(FWBlogEntity*)blogData url:(NSString *)url {
+    NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:url]
                                                      encoding:NSUTF8StringEncoding
                                                         error:nil];
     NSString* tmpHtml = htmlContent;
@@ -625,35 +820,29 @@
     if (range.length > 0) {
         tmpHtml = [htmlContent substringFromIndex:range.location + range.length];
     }
-
+    
     range = [tmpHtml rangeOfString:blogData.endFlag];
     if (range.length > 0) {
         tmpHtml = [tmpHtml substringToIndex:range.location];
     }
-
+    
     NSData* dataHtml = [tmpHtml dataUsingEncoding:NSUTF8StringEncoding];
     TFHpple* xpathParser = [[TFHpple alloc] initWithHTMLData:dataHtml];
     NSArray* elements = [xpathParser searchWithXPathQuery:blogData.parseDom];
     NSMutableArray* resultAry = [[NSMutableArray alloc] init];
-
+    
     for (TFHppleElement* element in elements) {
-
+        
         FWBlogItemEntity* data = [[FWBlogItemEntity alloc] init];
         data.title = element.content;
-
+        
         NSDictionary* elementContent = [element attributes];
         data.url = [blogData.baseURL stringByAppendingString:[elementContent objectForKey:@"href"]];
-
+        
         [resultAry addObject:data];
     }
-
-    blogData.itemAry = resultAry;
-    return YES;
-}
-
-- (BOOL)parsePageData:(FWBlogEntity*)blogData
-{
-    return NO;
+    
+    return resultAry;
 }
 
 @end
