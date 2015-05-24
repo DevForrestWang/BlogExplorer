@@ -9,12 +9,14 @@
 #import "FWBlogDataManager.h"
 #import "TFHpple.h"
 #import "FWBlogEntity.h"
+#import "FWBlogStatisticsEntity.h"
 
 @interface FWBlogDataManager ()
 
 @property (nonatomic, strong) NSMutableArray* urlAry;
 @property (nonatomic, strong) NSMutableArray* parseDataAry;
 @property (nonatomic, strong) NSString* filePath;
+@property (nonatomic, strong) FWBlogStatisticsEntity *statisticEnity;
 
 @end
 
@@ -26,6 +28,7 @@
     if (self) {
         _urlAry = [NSMutableArray array];
         _parseDataAry = [NSMutableArray array];
+        _statisticEnity = [[FWBlogStatisticsEntity alloc] init];
 
         NSString* documentDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         _filePath = [NSString stringWithFormat:@"%@/BlogExplorerData.plist", documentDir];
@@ -85,17 +88,21 @@
         }
     }
 
+    NSInteger wholePageNumber = [_parseDataAry count];
     __weak FWBlogDataManager* weekThis = self;
+    
     [self startThreadToParse:baseAry pageAry:pageAry blok:^(NSArray* resultAry) {
         [weekThis.parseDataAry addObjectsFromArray:resultAry];
         
         if ([weekThis.parseDataAry count] > 0) {
+            [weekThis statisticBlogData:resultAry wholePage:wholePageNumber];
+            
             // 保存全部数据
             NSData *data = [NSKeyedArchiver archivedDataWithRootObject:weekThis.parseDataAry];
             BOOL restlt = [data writeToFile:_filePath atomically:NO];
             NSLog(@"%s, result:%d, doc:%@", __FUNCTION__, restlt, _filePath);
             
-            block(_parseDataAry);
+            block(weekThis.parseDataAry);
         }
     }];
 }
@@ -505,7 +512,7 @@
 }
 
 - (void)makeTotlePageData:(NSMutableArray *)array {
-    
+
     NSArray *oneCatAry = [self totalPageURL:@"http://onevcat.com/#blog"
                               parseTotalDom:@"//nav[@class='pagination']/span[@class='pagination__page-number']"
                                   formatURL:@"http://onevcat.com/page/%ld/#blog"];
@@ -559,7 +566,7 @@
     
     
     NSArray *yifeiyangAry = [self fixedPageNumberURL:12
-                                           formatURL:@"http://www.yifeiyang.net/page/%ld/"];
+                                           formatURL:@"http://www.yifeiyang.net/page/%ld"];
     if ([yifeiyangAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"易飞扬"
@@ -569,7 +576,7 @@
                               endFlag:@"<div class=\"content-sidebar\">"
                              parseDom:@"//div/h2/a[@rel='bookmark']"];
     }
-    
+
     NSArray *allenMemosAry = [self fixedPageNumberURL:1
                                             formatURL:@"http://imallen.com/"];
     if ([allenMemosAry count] > 0) {
@@ -581,7 +588,7 @@
                               endFlag:@"<footer class=\"site-footer clearfix\">"
                              parseDom:@"//article/header/h2/a"];
     }
-    
+
     NSArray *pjk129Ary = [self fixedPageNumberURL:4
                                         formatURL:@"http://blog.csdn.net/pjk1129/article/list/%ld"];
     if ([pjk129Ary count] > 0) {
@@ -593,7 +600,7 @@
                               endFlag:@"<div id=\"papelist\" class=\"pagelist\">"
                              parseDom:@"//h1/span/a"];
     }
-    
+   
     NSArray *xfzlAry = [self fixedPageNumberURL:3
                                       formatURL:@"http://blog.csdn.net/duxinfeng2010/article/list/%ld"];
     if ([xfzlAry count] > 0) {
@@ -808,6 +815,8 @@
     }
     
     blogData.itemAry = itemAry;
+    
+    NSLog(@"%s, author:%@, count:%ld", __FUNCTION__, blogData.author, [blogData.itemAry count]);
     return YES;
 }
 
@@ -843,6 +852,32 @@
     }
     
     return resultAry;
+}
+
+- (void) statisticBlogData:(NSArray *)blogArray wholePage:(NSInteger)wholePage {
+    _statisticEnity.authorNumber = [blogArray count] + wholePage;
+    _statisticEnity.blogNumber += wholePage;
+    
+    NSInteger sucessedNumber = wholePage;
+    NSInteger errorNumber = 0;
+    NSMutableArray *errorAry = [NSMutableArray array];
+                     
+    for (FWBlogEntity *indexData in blogArray) {
+        if ([indexData.itemAry count] <= 0) {
+            errorNumber++;
+            [errorAry addObject:indexData.author];
+            continue;
+        }
+        
+        sucessedNumber++;
+        _statisticEnity.blogNumber += [indexData.itemAry count];
+    }
+    
+    _statisticEnity.sucessedNumber = sucessedNumber;
+    _statisticEnity.errorNumber = errorNumber;
+    _statisticEnity.errorAuthor = errorAry;
+    
+    NSLog(@"%s, statisticEnity:%@", __FUNCTION__, _statisticEnity);
 }
 
 @end

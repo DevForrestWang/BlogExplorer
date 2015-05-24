@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		371B69551B11C78000FB2F22 /* FWBlogStatisticsEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 371B69541B11C78000FB2F22 /* FWBlogStatisticsEntity.m */; };
 		37FDE7611AADE9DA00DE7FB9 /* FWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */; };
 		74B87917162C3DBE0028D523 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B87916162C3DBE0028D523 /* Cocoa.framework */; };
 		74B87934162C3DF20028D523 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B87933162C3DF20028D523 /* WebKit.framework */; };
@@ -27,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		371B69531B11C78000FB2F22 /* FWBlogStatisticsEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWBlogStatisticsEntity.h; sourceTree = "<group>"; };
+		371B69541B11C78000FB2F22 /* FWBlogStatisticsEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FWBlogStatisticsEntity.m; sourceTree = "<group>"; };
 		37FDE75F1AADE9DA00DE7FB9 /* FWUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWUtility.h; sourceTree = "<group>"; };
 		37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FWUtility.m; sourceTree = "<group>"; };
 		74B87912162C3DBE0028D523 /* BlogExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlogExplorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +147,8 @@
 				95E0C71B1AADA213002A8C55 /* FWBlogDataManager.m */,
 				95E0C71C1AADA213002A8C55 /* FWBlogEntity.h */,
 				95E0C71D1AADA213002A8C55 /* FWBlogEntity.m */,
+				371B69531B11C78000FB2F22 /* FWBlogStatisticsEntity.h */,
+				371B69541B11C78000FB2F22 /* FWBlogStatisticsEntity.m */,
 				37FDE75F1AADE9DA00DE7FB9 /* FWUtility.h */,
 				37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */,
 			);
@@ -230,6 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				371B69551B11C78000FB2F22 /* FWBlogStatisticsEntity.m in Sources */,
 				95E0C72C1AADA213002A8C55 /* FWBlogEntity.m in Sources */,
 				95E0C72B1AADA213002A8C55 /* FWBlogDataManager.m in Sources */,
 				95E0C7261AADA213002A8C55 /* AppDelegate.m in Sources */,

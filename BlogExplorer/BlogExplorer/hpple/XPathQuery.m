@@ -160,7 +160,7 @@ NSArray *PerformHTMLXPathQuery(NSData *document, NSString *query)
 
   if (doc == NULL)
     {
-      NSLog(@"Unable to parse.");
+      NSLog(@"%s, Unable to parse, query:%@", __FUNCTION__, query);
       return nil;
     }
 
@@ -179,7 +179,7 @@ NSArray *PerformXMLXPathQuery(NSData *document, NSString *query)
 
   if (doc == NULL)
     {
-      NSLog(@"Unable to parse.");
+      NSLog(@"%s, Unable to parse, query:%@", __FUNCTION__, query);
       return nil;
     }
 
