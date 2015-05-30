@@ -467,6 +467,7 @@
 }
 
 - (void)makeTotlePageData:(NSMutableArray *)array {
+    
     NSArray *oneCatAry = [self totalPageURL:@"http://onevcat.com/#blog"
                               parseTotalDom:@"//nav[@class='pagination']/span[@class='pagination__page-number']"
                                   formatURL:@"http://onevcat.com/page/%ld/#blog"];
@@ -733,6 +734,18 @@
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
                              parseDom:@"//li/h4/a"];
+    }
+
+    NSArray *hrchenAry = [self fixedPageNumberURL:4
+                                          formatURL:@"http://www.hrchen.com/page/%ld"];
+    if ([hrchenAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"hrchen's blogging"
+                              baseURL:@"http://www.hrchen.com"
+                        archiveURLAry:hrchenAry
+                            startFlag:@"<main id=\"content\" class=\"content\" role=\"main\">"
+                              endFlag:@"<footer class=\"site-footer clearfix\">"
+                             parseDom:@"//header/h2/a"];
     }
 }
 
