@@ -467,7 +467,7 @@
 }
 
 - (void)makeTotlePageData:(NSMutableArray *)array {
-    
+
     NSArray *oneCatAry = [self totalPageURL:@"http://onevcat.com/#blog"
                               parseTotalDom:@"//nav[@class='pagination']/span[@class='pagination__page-number']"
                                   formatURL:@"http://onevcat.com/page/%ld/#blog"];
@@ -747,6 +747,210 @@
                               endFlag:@"<footer class=\"site-footer clearfix\">"
                              parseDom:@"//header/h2/a"];
     }
+     
+    NSArray *xwfengAry = [self fixedPageNumberURL:3
+                                        formatURL:@"http://xiangwangfeng.com/page%ld"];
+    if ([xwfengAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"阿毛的蛋疼地 "
+                              baseURL:@"http://xiangwangfeng.com"
+                        archiveURLAry:xwfengAry
+                            startFlag:@"<ul class=\"listing\">"
+                              endFlag:@"<div id=\"post-pagination\" class=\"paginator\">"
+                             parseDom:@"//li/a"];
+    }
+    
+    NSMutableArray *yltxBLogAry = [self fixedPageNumberURL:5
+                                        formatURL:@"http://yulingtianxia.com/page/%ld/"];
+    if ([yltxBLogAry count] > 0) {
+        [yltxBLogAry replaceObjectAtIndex:0 withObject:@"http://yulingtianxia.com/"];
+        
+        [self makeTotalPageBlogEntity:array
+                               author:@"玉令天下的博客"
+                              baseURL:@"http://yulingtianxia.com"
+                        archiveURLAry:yltxBLogAry
+                            startFlag:@"<div id=\"main\">"
+                              endFlag:@"<div id=\"asidepart\">"
+                             parseDom:@"//article/header/h1/a"];
+    }
+   
+    NSMutableArray *wanghaiAry = [self fixedPageNumberURL:3
+                                        formatURL:@"http://blog.callmewhy.com/archives/page/%ld/"];
+    if ([wanghaiAry count] > 0) {
+        [wanghaiAry replaceObjectAtIndex:0 withObject:@"http://blog.callmewhy.com/archives/"];
+        [self makeTotalPageBlogEntity:array
+                               author:@"汪海的实验室"
+                              baseURL:@"http://blog.callmewhy.com"
+                        archiveURLAry:wanghaiAry
+                            startFlag:@"<div id=\"posts\" class=\"posts-collapse\">"
+                              endFlag:@"<div class=\"pagination\">"
+                             parseDom:@"//div/div/div/a"];
+    }
+    
+    
+    NSMutableArray *jishuBrotherAry = [self fixedPageNumberURL:2
+                                               formatURL:@"http://suenblog.duapp.com/?page=%ld"];
+    if ([jishuBrotherAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"技术哥"
+                              baseURL:@"http://suenblog.duapp.com"
+                        archiveURLAry:jishuBrotherAry
+                            startFlag:@"<div class=\"blogs\">"
+                              endFlag:@"<div id=\"main\">"
+                             parseDom:@"//article/header/h2/a"];
+    }
+     
+    NSMutableArray *whjBlogAry = [self fixedPageNumberURL:4
+                                               formatURL:@"http://my.oschina.net/w11h22j33?disp=1&catalog=0&sort=time&p=%ld"];
+    if ([whjBlogAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"whj的个人空间"
+                              baseURL:@""
+                        archiveURLAry:whjBlogAry
+                            startFlag:@"<div class=\"SpaceList BlogList\">"
+                              endFlag:@"<ul class=\"pager\">"
+                             parseDom:@"//div/div/h2/a"];
+    }
+    
+    NSMutableArray *answerHuangAry = [self fixedPageNumberURL:3
+                                               formatURL:@"http://answerhuang.duapp.com/index.php/page/%ld/"];
+    if ([answerHuangAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"answer_huang"
+                              baseURL:@""
+                        archiveURLAry:answerHuangAry
+                            startFlag:@"<div class=\"col-sm-8\" id=\"post-list\">"
+                              endFlag:@"<ul id=\"pager\" class=\"pagination\">"
+                             parseDom:@"//div/div/h2/a"];
+    }
+    
+    NSMutableArray *kenshinAry = [self fixedPageNumberURL:3
+                                               formatURL:@"http://www.cnblogs.com/kenshincui/default.aspx?page=%ld"];
+    if ([kenshinAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"Kenshin Cui's Blog"
+                              baseURL:@""
+                        archiveURLAry:kenshinAry
+                            startFlag:@"<div id=\"content\">"
+                              endFlag:@"<div id=\"pager\">"
+                             parseDom:@"//div[@class='post post-list-item']/h2/a"];
+    }
+    
+    NSMutableArray *sunnyxxAry = [self fixedPageNumberURL:39
+                                               formatURL:@"http://blog.sunnyxx.com/archives/page/%ld/"];
+    if ([sunnyxxAry count] > 0) {
+        [sunnyxxAry replaceObjectAtIndex:0 withObject:@"http://blog.sunnyxx.com/archives/"];
+        [self makeTotalPageBlogEntity:array
+                               author:@"Sunnyxx的技术博客"
+                              baseURL:@"http://blog.sunnyxx.com"
+                        archiveURLAry:sunnyxxAry
+                            startFlag:@"<div class=\"article-inner\">"
+                              endFlag:@"<nav id=\"page-nav\">"
+                             parseDom:@"//header/h1/a"];
+    }
+    
+    NSMutableArray *tedHomePahgeAry = [self fixedPageNumberURL:7
+                                               formatURL:@"http://wufawei.com/page%ld/"];
+    if ([tedHomePahgeAry count] > 0) {
+        [tedHomePahgeAry replaceObjectAtIndex:0 withObject:@"http://wufawei.com/"];
+        [self makeTotalPageBlogEntity:array
+                               author:@"Ted's Homepage"
+                              baseURL:@"http://wufawei.com"
+                        archiveURLAry:tedHomePahgeAry
+                            startFlag:@"<ul class=\"listing\">"
+                              endFlag:@"<div id=\"post-pagination\" class=\"paginator\">"
+                             parseDom:@"//li/a"];
+    }
+    
+    NSMutableArray *hufengAry = [self fixedPageNumberURL:8
+                                               formatURL:@"http://hufeng825.github.io/page/%ld/"];
+    if ([hufengAry count] > 0) {
+        [hufengAry replaceObjectAtIndex:0 withObject:@"http://hufeng825.github.io/"];
+        [self makeTotalPageBlogEntity:array
+                               author:@"hufeng825"
+                              baseURL:@"http://hufeng825.github.io"
+                        archiveURLAry:hufengAry
+                            startFlag:@"<div class=\"span9 panel\">"
+                              endFlag:@"<div class=\"pagination pagination-centered \" id=\"Pagination\">"
+                             parseDom:@"//header/h1/a"];
+    }
+    
+    NSMutableArray *keweiBlogAry = [self fixedPageNumberURL:11
+                                               formatURL:@"http://www.cnblogs.com/wangkewei/default.aspx?page=%ld"];
+    if ([keweiBlogAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"克伟的博客"
+                              baseURL:@""
+                        archiveURLAry:keweiBlogAry
+                            startFlag:@"<div id=\"content\">"
+                              endFlag:@"<div id=\"pager\">"
+                             parseDom:@"//div/h2/a"];
+    }
+    
+    NSMutableArray *yuanAry = [self fixedPageNumberURL:47
+                                               formatURL:@"http://42.96.192.22/?cat=3&paged=%ld"];
+    if ([yuanAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"Yuan博客"
+                              baseURL:@""
+                        archiveURLAry:yuanAry
+                            startFlag:@"<div id=\"content\" role=\"main\">"
+                              endFlag:@"<nav id=\"nav-below\" class=\"navigation\" role=\"navigation\">"
+                             parseDom:@"//article/header/h1/a"];
+    }
+    
+    NSMutableArray *casaTaloyumAry = [self fixedPageNumberURL:2
+                                               formatURL:@"http://casatwy.com/index%ld.html"];
+    if ([casaTaloyumAry count] > 0) {
+        [casaTaloyumAry replaceObjectAtIndex:0 withObject:@"http://casatwy.com/index.html"];
+        [self makeTotalPageBlogEntity:array
+                               author:@"Casa Taloyum"
+                              baseURL:@""
+                        archiveURLAry:casaTaloyumAry
+                            startFlag:@"<div class=\"col-sm-9\">"
+                              endFlag:@"<div class=\"col-sm-3 well well-sm\" id=\"sidebar\">"
+                             parseDom:@"//article/h2/a"];
+    }
+
+    NSMutableArray *laotanBlogAry = [self fixedPageNumberURL:15
+                                               formatURL:@"http://www.tanhao.me/archives/page/%ld/"];
+    if ([laotanBlogAry count] > 0) {
+        [laotanBlogAry replaceObjectAtIndex:0 withObject:@"http://www.tanhao.me/archives/"];
+        [self makeTotalPageBlogEntity:array
+                               author:@"老谭笔记"
+                              baseURL:@"http://www.tanhao.me/"
+                        archiveURLAry:laotanBlogAry
+                            startFlag:@"<div id=\"posts\" class=\"posts-collapse\">"
+                              endFlag:@"<div class=\"pagination\">"
+                             parseDom:@"//div/div/h1/a"];
+    }
+    
+    NSMutableArray *cocoabitAry = [self fixedPageNumberURL:9
+                                               formatURL:@"http://blog.cocoabit.com/page/%ld/"];
+    if ([cocoabitAry count] > 0) {
+        [self makeTotalPageBlogEntity:array
+                               author:@"Cocoabit"
+                              baseURL:@"http://blog.cocoabit.com"
+                        archiveURLAry:cocoabitAry
+                            startFlag:@"<div class=\"posts\">"
+                              endFlag:@"<div class=\"pagination\">"
+                             parseDom:@"//div/h1/a"];
+    }
+    
+    /*
+    NSMutableArray *xiaoxiaotianAry = [self fixedPageNumberURL:5
+                                        formatURL:@"http://justsee.iteye.com/category/223124?page=%ld"];
+    if ([xiaoxiaotianAry count] > 0) {
+        [xiaoxiaotianAry replaceObjectAtIndex:0 withObject:@"http://justsee.iteye.com/category/223124"];
+        [self makeTotalPageBlogEntity:array
+                               author:@"啸笑天"
+                              baseURL:@"http://justsee.iteye.com"
+                        archiveURLAry:xiaoxiaotianAry
+                            startFlag:@"<div id=\"content\" class=\"clearfix\">"
+                              endFlag:@"<div id=\"footer\" class=\"clearfix\">"
+                             parseDom:@"//div/div/h3/a"];
+    }
+     */
 }
 
 - (NSArray *)totalPageURL:(NSString *)basePage
@@ -775,7 +979,7 @@
     return [self fixedPageNumberURL:pageNumber formatURL:formatURL];
 }
 
-- (NSArray *)fixedPageNumberURL:(NSInteger)totalNum formatURL:(NSString *)formatURL {
+- (NSMutableArray *)fixedPageNumberURL:(NSInteger)totalNum formatURL:(NSString *)formatURL {
     NSMutableArray *urlAry = [NSMutableArray array];
     for (NSInteger index = 1; index <= totalNum; index++) {
         NSString *pageURL = [NSString stringWithFormat:formatURL, (long)index];
@@ -922,7 +1126,10 @@
         data.title = element.content;
         
         NSDictionary* elementContent = [element attributes];
-        data.url = [blogData.baseURL stringByAppendingString:[elementContent objectForKey:@"href"]];
+        
+        NSString *url = [blogData.baseURL stringByAppendingString:[elementContent objectForKey:@"href"]];
+        url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        data.url = url;
         
         [resultAry addObject:data];
     }
