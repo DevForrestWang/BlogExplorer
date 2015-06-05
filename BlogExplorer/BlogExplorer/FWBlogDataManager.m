@@ -47,7 +47,6 @@
     [self makeWholePage:_urlAry];
     [self makeBaseData:_urlAry];
     [self makeTotlePageData:_urlAry];
-    [self makePageData:_urlAry];
 }
 
 - (void)loadLocalData:(void (^)(NSArray* blogAry))block
@@ -1006,10 +1005,6 @@
     data.endFlag = endFlag;
     data.parseDom = parseDom;
     [array addObject:data];
-}
-
-- (void)makePageData:(NSMutableArray*)array
-{
 }
 
 - (void)startThreadToParse:(NSArray*)baseAry
