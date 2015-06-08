@@ -466,7 +466,6 @@
 }
 
 - (void)makeTotlePageData:(NSMutableArray *)array {
-
     NSArray *oneCatAry = [self totalPageURL:@"http://onevcat.com/#blog"
                               parseTotalDom:@"//nav[@class='pagination']/span[@class='pagination__page-number']"
                                   formatURL:@"http://onevcat.com/page/%ld/#blog"];
@@ -935,21 +934,18 @@
                               endFlag:@"<div class=\"pagination\">"
                              parseDom:@"//div/h1/a"];
     }
-    
-    /*
+
     NSMutableArray *xiaoxiaotianAry = [self fixedPageNumberURL:5
                                         formatURL:@"http://justsee.iteye.com/category/223124?page=%ld"];
     if ([xiaoxiaotianAry count] > 0) {
-        [xiaoxiaotianAry replaceObjectAtIndex:0 withObject:@"http://justsee.iteye.com/category/223124"];
         [self makeTotalPageBlogEntity:array
                                author:@"啸笑天"
                               baseURL:@"http://justsee.iteye.com"
                         archiveURLAry:xiaoxiaotianAry
-                            startFlag:@"<div id=\"content\" class=\"clearfix\">"
-                              endFlag:@"<div id=\"footer\" class=\"clearfix\">"
-                             parseDom:@"//div/div/h3/a"];
+                            startFlag:@"<div id=\"main\">"
+                              endFlag:@"<div id=\"local\">"
+                             parseDom:@"//div[@class='blog_title']/h3/a"];
     }
-     */
 }
 
 - (NSArray *)totalPageURL:(NSString *)basePage
@@ -1096,9 +1092,20 @@
 }
 
 - (NSArray *)parseSinglePage:(FWBlogEntity*)blogData url:(NSString *)url {
+    NSMutableArray* resultAry = [[NSMutableArray alloc] init];
+    NSError *error = nil;
     NSString* htmlContent = [NSString stringWithContentsOfURL:[NSURL URLWithString:url]
                                                      encoding:NSUTF8StringEncoding
-                                                        error:nil];
+                                                    error:&error];
+    if (error) {
+        htmlContent = [self parsePageByGBK:url];
+    }
+    
+    if ([htmlContent length]<= 0) {
+        NSLog(@"%s, the htmlContent:%@ is empty, error:%@", __FUNCTION__, htmlContent, [error description]);
+        return resultAry;
+    }
+    
     NSString* tmpHtml = htmlContent;
     NSRange range = [htmlContent rangeOfString:blogData.startFlag];
     if (range.length > 0) {
@@ -1113,7 +1120,6 @@
     NSData* dataHtml = [tmpHtml dataUsingEncoding:NSUTF8StringEncoding];
     TFHpple* xpathParser = [[TFHpple alloc] initWithHTMLData:dataHtml];
     NSArray* elements = [xpathParser searchWithXPathQuery:blogData.parseDom];
-    NSMutableArray* resultAry = [[NSMutableArray alloc] init];
     
     for (TFHppleElement* element in elements) {
         
@@ -1130,6 +1136,24 @@
     }
     
     return resultAry;
+}
+
+- (NSString *)parsePageByGBK:(NSString *)url {
+    NSURL *urlURL = [NSURL URLWithString:url];
+    NSData *data = [NSData dataWithContentsOfURL:urlURL];
+    
+    NSString *htmlContent = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
+    if (nil == htmlContent) {
+        NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+        htmlContent = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:enc];
+    }
+    
+    if (nil == htmlContent) {
+        NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingHZ_GB_2312);
+        htmlContent = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:enc];
+    }
+    
+    return htmlContent;
 }
 
 - (void) statisticBlogData:(NSArray *)blogArray wholePage:(NSInteger)wholePage {
