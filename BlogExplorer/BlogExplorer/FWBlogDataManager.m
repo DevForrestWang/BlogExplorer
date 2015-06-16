@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSMutableArray* parseDataAry;
 @property (nonatomic, strong) NSString* filePath;
 @property (nonatomic, strong) FWBlogStatisticsEntity *statisticEnity;
-
+@property (nonatomic, strong) BlogStatisticsBlock statisticsBlock;
 @end
 
 @implementation FWBlogDataManager
@@ -106,8 +106,10 @@
     }];
 }
 
-- (void)saveData
-{
+- (void)loadStatusData:(BlogStatisticsBlock)block {
+    if (block) {
+        self.statisticsBlock = block;
+    }
 }
 
 #pragma mark - Private method
@@ -1179,6 +1181,9 @@
     _statisticEnity.errorNumber = errorNumber;
     _statisticEnity.errorAuthor = errorAry;
     
+    if (self.statisticsBlock) {
+        self.statisticsBlock(_statisticEnity);
+    }
     NSLog(@"%s, statisticEnity:%@", __FUNCTION__, _statisticEnity);
 }
 

@@ -8,10 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@class FWBlogStatisticsEntity;
+
+typedef void(^BlogStatisticsBlock) (FWBlogStatisticsEntity *statisticsData);
+
 @interface FWBlogDataManager : NSObject
 
 - (void)initURLData;
 - (void)loadLocalData:(void (^)(NSArray *blogAry))block;
 - (void)parseData:(BOOL)forceParse block:(void (^)(NSArray *blogAry))block;
-- (void)saveData;
+- (void)loadStatusData:(BlogStatisticsBlock)block;
+
 @end

@@ -10,6 +10,7 @@
 #import "FWBlogDataManager.h"
 #import "FWBlogEntity.h"
 #import "FWUtility.h"
+#import "FWBlogStatisticsEntity.h"
 
 #define LeftViewWidth  314
 
@@ -62,6 +63,12 @@
         [weekThis refreshData:blogAry];
     }];
     
+    [weekThis.statusLabel setStringValue:@""];
+    [_blogManager loadStatusData:^(FWBlogStatisticsEntity *statisticsData) {
+        NSString *strSatus = [NSString stringWithFormat:@"Authors:%ld, Blogs:%0.0f, Sucessed:%0.0f, Error:%0.0f", statisticsData.authorNumber, statisticsData.blogNumber, statisticsData.sucessedNumber, statisticsData.errorNumber];
+        [weekThis.statusLabel setStringValue:strSatus];
+    }];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(searchTextDidChange:)
                                                  name:NSControlTextDidChangeNotification
@@ -92,6 +99,8 @@
         frame.origin.x = LeftViewWidth;
         frame.size.width = width - LeftViewWidth;
         _webView.frame = frame;
+        
+        [_statusLabel setHidden:NO];
     }
     else {
         [_blogListScrollView setHidden:YES];
@@ -102,6 +111,8 @@
         frame.origin.x = 0;
         frame.size.width = width;
         _webView.frame = frame;
+        
+        [_statusLabel setHidden:YES];
     }
     
     [_blogTableScrollView setHidden:YES];

@@ -17,6 +17,7 @@
 @property (weak) IBOutlet NSButton *btnGoBack;
 @property (weak) IBOutlet NSButton *btnGoForward;
 @property (weak) IBOutlet NSSearchField *searchTextField;
+@property (weak) IBOutlet NSTextField *statusLabel;
 
 // 博客列表
 @property (weak) IBOutlet NSScrollView *blogListScrollView;
