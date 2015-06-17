@@ -63,7 +63,7 @@
         [weekThis refreshData:blogAry];
     }];
     
-    [weekThis.statusLabel setStringValue:@""];
+    [weekThis.statusLabel setStringValue:@"State"];
     [_blogManager loadStatusData:^(FWBlogStatisticsEntity *statisticsData) {
         NSString *strSatus = [NSString stringWithFormat:@"Authors:%ld, Blogs:%0.0f, Sucessed:%0.0f, Error:%0.0f", statisticsData.authorNumber, statisticsData.blogNumber, statisticsData.sucessedNumber, statisticsData.errorNumber];
         [weekThis.statusLabel setStringValue:strSatus];
