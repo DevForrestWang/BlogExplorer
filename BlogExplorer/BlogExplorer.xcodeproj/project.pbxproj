@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3718CBBA1B32B9A700036FCE /* NSArray+Log.m in Sources */ = {isa = PBXBuildFile; fileRef = 3718CBB91B32B9A700036FCE /* NSArray+Log.m */; };
 		371B69551B11C78000FB2F22 /* FWBlogStatisticsEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 371B69541B11C78000FB2F22 /* FWBlogStatisticsEntity.m */; };
 		37FDE7611AADE9DA00DE7FB9 /* FWUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */; };
 		74B87917162C3DBE0028D523 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B87916162C3DBE0028D523 /* Cocoa.framework */; };
@@ -28,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3718CBB81B32B9A700036FCE /* NSArray+Log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Log.h"; sourceTree = "<group>"; };
+		3718CBB91B32B9A700036FCE /* NSArray+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Log.m"; sourceTree = "<group>"; };
 		371B69531B11C78000FB2F22 /* FWBlogStatisticsEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWBlogStatisticsEntity.h; sourceTree = "<group>"; };
 		371B69541B11C78000FB2F22 /* FWBlogStatisticsEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FWBlogStatisticsEntity.m; sourceTree = "<group>"; };
 		37FDE75F1AADE9DA00DE7FB9 /* FWUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWUtility.h; sourceTree = "<group>"; };
@@ -151,6 +154,8 @@
 				371B69541B11C78000FB2F22 /* FWBlogStatisticsEntity.m */,
 				37FDE75F1AADE9DA00DE7FB9 /* FWUtility.h */,
 				37FDE7601AADE9DA00DE7FB9 /* FWUtility.m */,
+				3718CBB81B32B9A700036FCE /* NSArray+Log.h */,
+				3718CBB91B32B9A700036FCE /* NSArray+Log.m */,
 			);
 			path = BlogExplorer;
 			sourceTree = "<group>";
@@ -240,6 +245,7 @@
 				95E0C72B1AADA213002A8C55 /* FWBlogDataManager.m in Sources */,
 				95E0C7261AADA213002A8C55 /* AppDelegate.m in Sources */,
 				95E0C72D1AADA213002A8C55 /* TFHpple.m in Sources */,
+				3718CBBA1B32B9A700036FCE /* NSArray+Log.m in Sources */,
 				95E0C72F1AADA213002A8C55 /* XPathQuery.m in Sources */,
 				95E0C7301AADA213002A8C55 /* main.m in Sources */,
 				95E0C72E1AADA213002A8C55 /* TFHppleElement.m in Sources */,

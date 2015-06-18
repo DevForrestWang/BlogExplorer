@@ -7,6 +7,7 @@
 //
 
 #import "FWBlogStatisticsEntity.h"
+#import "NSArray+Log.h"
 
 @implementation FWBlogStatisticsEntity
 

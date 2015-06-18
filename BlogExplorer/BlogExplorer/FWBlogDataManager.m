@@ -519,19 +519,6 @@
                              parseDom:@"//div[@class='post']/h2/a"];
     }
     
-    
-    NSArray *yifeiyangAry = [self fixedPageNumberURL:12
-                                           formatURL:@"http://www.yifeiyang.net/page/%ld"];
-    if ([yifeiyangAry count] > 0) {
-        [self makeTotalPageBlogEntity:array
-                               author:@"易飞扬"
-                              baseURL:@""
-                        archiveURLAry:yifeiyangAry
-                            startFlag:@"<div id=\"content-body\">"
-                              endFlag:@"<div class=\"content-sidebar\">"
-                             parseDom:@"//div/h2/a[@rel='bookmark']"];
-    }
-
     NSArray *allenMemosAry = [self fixedPageNumberURL:1
                                             formatURL:@"http://imallen.com/"];
     if ([allenMemosAry count] > 0) {
@@ -628,8 +615,11 @@
                              parseDom:@"//h1/span/a"];
     }
     
+    // http://www.jianshu.com/collection/8a0602419a76/top?page=%ld
+    // http://www.jianshu.com/collections/6919/notes?order_by=added_at&page=18
+    // <a href="/collections/6919/notes?order_by=likes_count">热门排序</a>
     NSArray *sglAry = [self fixedPageNumberURL:1
-                                     formatURL:@"http://www.jianshu.com/collection/6d967bc213dd/top?page=%ld"];
+                                     formatURL:@"http://www.jianshu.com/collections/4232/notes?order_by=added_at&page=%ld"];
     if ([sglAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"拾光流"
@@ -637,11 +627,11 @@
                         archiveURLAry:sglAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
     
     NSArray *dppAry = [self fixedPageNumberURL:4
-                                     formatURL:@"http://www.jianshu.com/collection/e62c0b71606b/top?page=%ld"];
+                                     formatURL:@"http://www.jianshu.com/collections/3040/notes?order_by=added_at&page=%ld"];
     if ([dppAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"大澎湃"
@@ -649,11 +639,11 @@
                         archiveURLAry:dppAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
     
-    NSArray *janzTamAry = [self fixedPageNumberURL:15
-                                         formatURL:@"http://www.jianshu.com/collection/19dbe28002a3/top?page=%ld"];
+    NSArray *janzTamAry = [self fixedPageNumberURL:20
+                                         formatURL:@"http://www.jianshu.com/collections/6919/notes?order_by=added_at&page=%ld"];
     if ([janzTamAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"JanzTam"
@@ -661,11 +651,11 @@
                         archiveURLAry:janzTamAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
     
-    NSArray *daviChoiseAry = [self fixedPageNumberURL:27
-                                            formatURL:@"http://www.jianshu.com/collection/27e6fb9b84f7/top?page=%ld"];
+    NSArray *daviChoiseAry = [self fixedPageNumberURL:31
+                                            formatURL:@"http://www.jianshu.com/collections/6286/notes?order_by=added_at&page=%ld"];
     if ([daviChoiseAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"Davi_choise凡UP"
@@ -673,11 +663,11 @@
                         archiveURLAry:daviChoiseAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
     
     NSArray *robinChaoAry = [self fixedPageNumberURL:5
-                                           formatURL:@"http://www.jianshu.com/collection/2a6ff924a333/top?page=%ld"];
+                                           formatURL:@"http://www.jianshu.com/collections/5843/notes?order_by=added_at&page=%ld"];
     if ([robinChaoAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"RobinChao"
@@ -685,11 +675,11 @@
                         archiveURLAry:robinChaoAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
     
     NSArray *yearsAry = [self fixedPageNumberURL:5
-                                       formatURL:@"http://www.jianshu.com/collection/8beb0140cf67/top?page=%ld"];
+                                       formatURL:@"http://www.jianshu.com/collections/9448/notes?order_by=added_at&page=%ld"];
     if ([yearsAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"23Years"
@@ -697,11 +687,11 @@
                         archiveURLAry:yearsAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
     
     NSArray *jasonWuAry = [self fixedPageNumberURL:3
-                                         formatURL:@"http://www.jianshu.com/collection/fec73bf35ed3/top?page=%ld"];
+                                         formatURL:@"http://www.jianshu.com/collections/9986/notes?order_by=added_at&page=%ld"];
     if ([jasonWuAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"JasonWu"
@@ -709,11 +699,11 @@
                         archiveURLAry:jasonWuAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
     
     NSArray *jzAry = [self fixedPageNumberURL:1
-                                    formatURL:@"http://www.jianshu.com/collection/505442c4ef96/top?page=%ld"];
+                                    formatURL:@"http://www.jianshu.com/collections/9315/notes?order_by=added_at&page=%ld"];
     if ([jzAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"Ludwig的iOS开发入门"
@@ -721,11 +711,11 @@
                         archiveURLAry:jzAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
     
-    NSArray *aboutIOSAry = [self fixedPageNumberURL:1
-                                          formatURL:@"http://www.jianshu.com/collection/8a0602419a76/top?page=%ld"];
+    NSArray *aboutIOSAry = [self fixedPageNumberURL:3
+                                          formatURL:@"http://www.jianshu.com/collections/11339/notes?order_by=added_at&page=%ld"];
     if ([aboutIOSAry count] > 0) {
         [self makeTotalPageBlogEntity:array
                                author:@"AboutIOS"
@@ -733,7 +723,7 @@
                         archiveURLAry:aboutIOSAry
                             startFlag:@"<div id=\"list-container\" class=\"tab-pane active\">"
                               endFlag:@"<div class=\"hidden\">"
-                             parseDom:@"//li/h4/a"];
+                             parseDom:@"//li/div/h4/a"];
     }
 
     NSArray *hrchenAry = [self fixedPageNumberURL:4
