@@ -98,8 +98,8 @@
             
             // 保存全部数据
             NSData *data = [NSKeyedArchiver archivedDataWithRootObject:weekThis.parseDataAry];
-            BOOL restlt = [data writeToFile:_filePath atomically:NO];
-            NSLog(@"%s, result:%d, doc:%@", __FUNCTION__, restlt, _filePath);
+            BOOL result = [data writeToFile:_filePath atomically:NO];
+            NSLog(@"%s, result:%d, doc:%@", __FUNCTION__, result, _filePath);
             
             block(weekThis.parseDataAry);
         }

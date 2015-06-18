@@ -16,7 +16,6 @@
 		95719A5A1AB020C800662DF9 /* AppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 95719A591AB020C800662DF9 /* AppIcon.png */; };
 		95719A5E1AB0223C00662DF9 /* blogList.icns in Resources */ = {isa = PBXBuildFile; fileRef = 95719A5D1AB0223C00662DF9 /* blogList.icns */; };
 		95E0C7261AADA213002A8C55 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 95E0C7111AADA213002A8C55 /* AppDelegate.m */; };
-		95E0C7271AADA213002A8C55 /* BlogExplorer-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 95E0C7121AADA213002A8C55 /* BlogExplorer-Info.plist */; };
 		95E0C7291AADA213002A8C55 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 95E0C7161AADA213002A8C55 /* InfoPlist.strings */; };
 		95E0C72A1AADA213002A8C55 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E0C7181AADA213002A8C55 /* MainMenu.xib */; };
 		95E0C72B1AADA213002A8C55 /* FWBlogDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 95E0C71B1AADA213002A8C55 /* FWBlogDataManager.m */; };
@@ -199,7 +198,7 @@
 		74B87909162C3DBE0028D523 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "";
 			};
 			buildConfigurationList = 74B8790C162C3DBE0028D523 /* Build configuration list for PBXProject "BlogExplorer" */;
@@ -225,7 +224,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				95719A5A1AB020C800662DF9 /* AppIcon.png in Resources */,
-				95E0C7271AADA213002A8C55 /* BlogExplorer-Info.plist in Resources */,
 				95719A5E1AB0223C00662DF9 /* blogList.icns in Resources */,
 				95719A581AB0209300662DF9 /* AppIcon.icns in Resources */,
 				95E0C7291AADA213002A8C55 /* InfoPlist.strings in Resources */,
@@ -279,7 +277,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -307,7 +304,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
