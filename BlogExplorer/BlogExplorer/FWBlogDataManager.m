@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSMutableArray* urlAry;
 @property (nonatomic, strong) NSMutableArray* parseDataAry;
 @property (nonatomic, strong) NSString* filePath;
+@property (nonatomic, strong) NSString* saveDataPath;
+@property (nonatomic, strong) NSMutableDictionary* saveDataDic;
 @property (nonatomic, strong) FWBlogStatisticsEntity *statisticEnity;
 @property (nonatomic, strong) BlogStatisticsBlock statisticsBlock;
 @end
@@ -32,6 +34,7 @@
 
         NSString* documentDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         _filePath = [NSString stringWithFormat:@"%@/BlogExplorerData.plist", documentDir];
+        _saveDataPath = [NSString stringWithFormat:@"%@/BlogExplorerSaveData.plist", documentDir];
     }
 
     return self;
@@ -56,6 +59,9 @@
         return;
     }
 
+    NSData* saveData = [[NSData alloc] initWithContentsOfFile:_saveDataPath];
+    _saveDataDic = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
+    
     NSData* data = [[NSData alloc] initWithContentsOfFile:_filePath];
     NSArray* dataAry = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     if ([dataAry count] > 0) {
@@ -96,10 +102,17 @@
         if ([weekThis.parseDataAry count] > 0) {
             [weekThis statisticBlogData:resultAry wholePage:wholePageNumber];
             
+            // 缓存多页面的数据
+            if ([weekThis.saveDataDic count] > 0) {
+                NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:weekThis.saveDataDic];
+                BOOL saveResult = [saveData writeToFile:weekThis.saveDataPath atomically:NO];
+                NSLog(@"write saveData to file, result:%@, doc:%@", [weekThis printBOOL:saveResult], weekThis.saveDataPath);
+            }
+            
             // 保存全部数据
             NSData *data = [NSKeyedArchiver archivedDataWithRootObject:weekThis.parseDataAry];
-            BOOL result = [data writeToFile:_filePath atomically:NO];
-            NSLog(@"%s, result:%d, doc:%@", __FUNCTION__, result, _filePath);
+            BOOL result = [data writeToFile:weekThis.filePath atomically:NO];
+            NSLog(@"%s, result:%@, doc:%@", __FUNCTION__, [weekThis printBOOL:result], weekThis.filePath);
             
             block(weekThis.parseDataAry);
         }
@@ -1073,12 +1086,35 @@
 - (BOOL)parsePageData:(FWBlogEntity*)blogData
 {
     NSMutableArray *itemAry = [NSMutableArray array];
+    NSInteger indexNumber = 0;
+    NSArray *tmpAry = nil;
+    
     for (NSString *indexURL in blogData.archiveURLAry) {
-        [itemAry addObjectsFromArray:[self parseSinglePage:blogData url:indexURL]];
+        
+        // 多个页面时第一个页面有可能有变化，因此从第二个页面开始使用缓存
+        if (indexNumber > 0) {
+            if (!_saveDataDic) {
+                _saveDataDic = [NSMutableDictionary dictionary];
+            }
+            
+            tmpAry = [_saveDataDic objectForKey:indexURL];
+            if (!tmpAry || [tmpAry count] <= 0) {
+                tmpAry = [self parseSinglePage:blogData url:indexURL];
+                
+                if (tmpAry) {
+                    [_saveDataDic setObject:tmpAry forKey:indexURL];
+                }
+            }
+        }
+        else {
+            tmpAry = [self parseSinglePage:blogData url:indexURL];
+        }
+        
+        [itemAry addObjectsFromArray:tmpAry];
+        indexNumber++;
     }
     
     blogData.itemAry = itemAry;
-    
     NSLog(@"%s, author:%@, count:%ld", __FUNCTION__, blogData.author, [blogData.itemAry count]);
     return YES;
 }
@@ -1175,6 +1211,10 @@
         self.statisticsBlock(_statisticEnity);
     }
     NSLog(@"%s, statisticEnity:%@", __FUNCTION__, _statisticEnity);
+}
+
+- (NSString *)printBOOL:(BOOL)result {
+    return result ? @"YES" : @"NO";
 }
 
 @end
